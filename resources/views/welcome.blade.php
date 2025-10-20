@@ -24,12 +24,33 @@
             @if (Route::has('login'))
                 <nav class="flex items-center justify-end gap-4">
                     @auth
-                        <a
-                            href="{{ url('/dashboard') }}"
-                            class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal"
-                        >
-                            Dashboard
-                        </a>
+                        <span class="text-sm text-gray-700 dark:text-gray-300">
+                            Welcome, {{ auth()->user()->name }}!
+                        </span>
+                        @if(auth()->user()->role === 'owner')
+                            <a
+                                href="{{ url('/owner/dashboard') }}"
+                                class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal"
+                            >
+                                Dashboard
+                            </a>
+                        @else
+                            <a
+                                href="{{ url('/passenger/profile') }}"
+                                class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal"
+                            >
+                                My Profile
+                            </a>
+                        @endif
+                        <form method="POST" action="{{ route('logout') }}" class="inline">
+                            @csrf
+                            <button
+                                type="submit"
+                                class="px-5 py-1.5 bg-red-600 text-white border border-red-600 hover:bg-red-700 hover:border-red-700 rounded-sm text-sm leading-normal"
+                            >
+                                Logout
+                            </button>
+                        </form>
                     @else
                         <a
                             href="{{ route('login') }}"

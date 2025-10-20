@@ -31,62 +31,88 @@
             
             <!-- Full Name -->
             <div class="mb-4">
-                <label for="name" class="block text-gray-700 font-medium mb-2">Full Name *</label>
+                <label for="name" class="block text-gray-700 font-medium mb-2">
+                    Full Name *
+                </label>
                 <input 
                     type="text" 
                     id="name" 
                     name="name" 
                     value="{{ old('name') }}"
                     required
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 @error('name') border-red-500 @enderror"
                     placeholder="Ahmed Hassan"
                 >
+                @error('name')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+                <p class="text-xs text-gray-500 mt-1">Only letters and spaces (minimum 3 characters)</p>
             </div>
 
             <!-- Email -->
             <div class="mb-4">
-                <label for="email" class="block text-gray-700 font-medium mb-2">Email Address *</label>
+                <label for="email" class="block text-gray-700 font-medium mb-2">
+                    Email Address *
+                </label>
                 <input 
                     type="email" 
                     id="email" 
                     name="email" 
                     value="{{ old('email') }}"
                     required
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 @error('email') border-red-500 @enderror"
                     placeholder="your@email.com"
                 >
+                @error('email')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <!-- Phone -->
             <div class="mb-4">
-                <label for="phone" class="block text-gray-700 font-medium mb-2">Phone Number *</label>
+                <label for="phone" class="block text-gray-700 font-medium mb-2">
+                    Phone Number *
+                </label>
                 <input 
                     type="tel" 
                     id="phone" 
                     name="phone" 
                     value="{{ old('phone') }}"
                     required
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                    maxlength="11"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 @error('phone') border-red-500 @enderror"
                     placeholder="01712345678"
                 >
+                @error('phone')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+                <p class="text-xs text-gray-500 mt-1">Bangladesh format: 01XXXXXXXXX (11 digits)</p>
             </div>
 
             <!-- Password -->
             <div class="mb-4">
-                <label for="password" class="block text-gray-700 font-medium mb-2">Password *</label>
+                <label for="password" class="block text-gray-700 font-medium mb-2">
+                    Password *
+                </label>
                 <input 
                     type="password" 
                     id="password" 
                     name="password" 
                     required
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-                    placeholder="Minimum 6 characters"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 @error('password') border-red-500 @enderror"
+                    placeholder="Minimum 8 characters"
                 >
+                @error('password')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+                <p class="text-xs text-gray-500 mt-1">At least 8 characters with letters and numbers</p>
             </div>
 
             <!-- Confirm Password -->
             <div class="mb-4">
-                <label for="password_confirmation" class="block text-gray-700 font-medium mb-2">Confirm Password *</label>
+                <label for="password_confirmation" class="block text-gray-700 font-medium mb-2">
+                    Confirm Password *
+                </label>
                 <input 
                     type="password" 
                     id="password_confirmation" 
@@ -99,27 +125,39 @@
 
             <!-- Address (Optional) -->
             <div class="mb-4">
-                <label for="address" class="block text-gray-700 font-medium mb-2">Address (Optional)</label>
+                <label for="address" class="block text-gray-700 font-medium mb-2">
+                    Address (Optional)
+                </label>
                 <textarea 
                     id="address" 
                     name="address" 
                     rows="2"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                    maxlength="500"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 @error('address') border-red-500 @enderror"
                     placeholder="Dhanmondi, Dhaka-1209"
                 >{{ old('address') }}</textarea>
+                @error('address')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <!-- NID (Optional) -->
             <div class="mb-6">
-                <label for="nid" class="block text-gray-700 font-medium mb-2">NID Number (Optional)</label>
+                <label for="nid" class="block text-gray-700 font-medium mb-2">
+                    NID Number (Optional)
+                </label>
                 <input 
                     type="text" 
                     id="nid" 
                     name="nid" 
                     value="{{ old('nid') }}"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-                    placeholder="1234567890123"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 @error('nid') border-red-500 @enderror"
+                    placeholder="Enter 10, 13, or 17 digit NID"
                 >
+                @error('nid')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+                <p class="text-xs text-gray-500 mt-1">Old: 10/13 digits, Smart: 17 digits</p>
             </div>
 
             <!-- Submit Button -->

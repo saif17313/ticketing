@@ -18,16 +18,33 @@ class LoginController extends Controller
     }
 
     /**
-     * Handle login request
-     * Validates user credentials and role (passenger or owner)
+     * Handle login request with enhanced validation and session management
+     * Validates user credentials, role, and account status
      */
     public function login(Request $request)
     {
-        // Validate input fields
+        // Enhanced validation with custom messages
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'password' => 'required|min:6',
-            'role' => 'required|in:passenger,owner',
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+            ],
+            'password' => [
+                'required',
+                'string',
+                'min:6',  // Minimum 6 characters (we'll upgrade this to 8 for new registrations)
+            ],
+            'role' => [
+                'required',
+                'in:passenger,owner',
+            ],
+        ], [
+            'email.required' => 'Please enter your email address.',
+            'email.email' => 'Please enter a valid email address.',
+            'password.required' => 'Please enter your password.',
+            'password.min' => 'Password must be at least 6 characters.',
+            'role.required' => 'Please select account type (Passenger or Owner).',
         ]);
 
         if ($validator->fails()) {
@@ -38,56 +55,85 @@ class LoginController extends Controller
 
         // Prepare credentials for authentication
         $credentials = [
-            'email' => $request->email,
+            'email' => strtolower(trim($request->email)),  // Normalize email (lowercase, no spaces)
             'password' => $request->password,
-            'role' => $request->role,  // Must match the selected role
-            'is_active' => true,       // Only active users can login
+            'role' => $request->role,      // Must match the selected role in toggle
+            'is_active' => true,           // Only active accounts can login
         ];
 
-        // Attempt to login
-        if (Auth::attempt($credentials, $request->filled('remember'))) {
-            // Regenerate session to prevent fixation attacks
+        // Check if "Remember Me" checkbox was checked
+        // filled() returns true if field exists and is not empty
+        $remember = $request->filled('remember');
+
+        // Attempt authentication with credentials
+        // Second parameter controls "Remember Me" functionality
+        // If true, Laravel creates a long-lived "remember_token" cookie (default 5 years)
+        if (Auth::attempt($credentials, $remember)) {
+            
+            // Security measure: Regenerate session ID to prevent session fixation attacks
+            // This creates a new session ID while keeping the session data
             $request->session()->regenerate();
 
-            // Redirect based on role
-            if (Auth::user()->role === 'owner') {
+            // Get the authenticated user
+            $user = Auth::user();
+
+            // Role-based redirection with personalized welcome message
+            if ($user->role === 'owner') {
+                // Owner users go to their management dashboard
                 return redirect()->intended('/owner/dashboard')
-                    ->with('success', 'Welcome back, ' . Auth::user()->name . '!');
+                    ->with('success', 'Welcome back, ' . $user->name . '! 🏢');
             } else {
+                // Passenger users go to homepage
                 return redirect()->intended('/')
-                    ->with('success', 'Welcome back, ' . Auth::user()->name . '!');
+                    ->with('success', 'Welcome back, ' . $user->name . '! 🎫');
             }
         }
 
-        // Login failed - check why
-        $user = \App\Models\User::where('email', $request->email)->first();
+        // === Login Failed - Provide Helpful Error Message ===
+        
+        // Find user by email to determine specific failure reason
+        $user = \App\Models\User::where('email', strtolower(trim($request->email)))->first();
         
         if (!$user) {
-            $errorMsg = 'No account found with this email.';
+            // Email not found in database
+            $errorMsg = 'No account found with this email address.';
         } elseif ($user->role !== $request->role) {
-            $errorMsg = 'Please select the correct account type (' . ucfirst($user->role) . ').';
+            // User exists but wrong role selected (e.g., owner trying to login as passenger)
+            $errorMsg = 'Incorrect account type. Please select "' . ucfirst($user->role) . '" instead.';
         } elseif (!$user->is_active) {
-            $errorMsg = 'Your account has been deactivated. Contact support.';
+            // Account exists but has been deactivated by admin
+            $errorMsg = 'Your account has been deactivated. Please contact support.';
         } else {
+            // Email and role correct, but password is wrong
             $errorMsg = 'Invalid password. Please try again.';
         }
 
+        // Redirect back to login form with error message and previous email
         return redirect()->back()
-            ->withInput($request->except('password'))
+            ->withInput($request->except('password'))  // Keep email but not password
             ->withErrors(['email' => $errorMsg]);
     }
 
     /**
-     * Logout user and redirect to homepage
+     * Logout user with complete session cleanup
+     * Invalidates session and regenerates CSRF token
      */
     public function logout(Request $request)
     {
+        // Log the user out (removes authentication data)
         Auth::logout();
         
+        // Invalidate the entire session (removes all session data)
+        // This prevents old session data from being used
         $request->session()->invalidate();
+        
+        // Regenerate CSRF token (security measure)
+        // This prevents CSRF attacks using old tokens
         $request->session()->regenerateToken();
         
-        return redirect('/')->with('success', 'You have been logged out successfully.');
+        // Redirect to homepage with goodbye message
+        return redirect('/')
+            ->with('success', 'You have been logged out successfully. Come back soon! 👋');
     }
 }
 
