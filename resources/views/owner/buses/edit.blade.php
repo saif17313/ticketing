@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Bus - BD Bus Tickets</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen">
+        <header class="bg-white shadow-sm border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-800">Edit Bus</h1>
+                        <p class="text-sm text-gray-600 mt-1">Update {{ $bus->bus_number }} information</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <a href="{{ route('owner.buses.index') }}" class="text-gray-600 hover:text-gray-900 font-medium"> Back</a>
+                        <a href="{{ route('owner.dashboard') }}" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition font-medium">Dashboard</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="bg-white rounded-lg shadow-sm p-8 border border-gray-200">
+                <form method="POST" action="{{ route('owner.buses.update', $bus) }}">
+                    @csrf
+                    @method('PUT')
+                    <div class="mb-6">
+                        <label for="company_id" class="block text-sm font-medium text-gray-700 mb-2">Company <span class="text-red-600">*</span></label>
+                        <select name="company_id" id="company_id" class="w-full px-4 py-2.5 border @error('company_id') border-red-500 @else border-gray-300 @enderror rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" required>
+                            <option value="">Select Company</option>
+                            @foreach($companies as $company)
+                                <option value="{{ $company->id }}" {{ old('company_id', $bus->company_id) == $company->id ? 'selected' : '' }}>{{ $company->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('company_id')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                    </div>
+                    <div class="mb-6">
+                        <label for="route_id" class="block text-sm font-medium text-gray-700 mb-2">Route <span class="text-red-600">*</span></label>
+                        <select name="route_id" id="route_id" class="w-full px-4 py-2.5 border @error('route_id') border-red-500 @else border-gray-300 @enderror rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" required>
+                            <option value="">Select Route</option>
+                            @foreach($routes as $route)
+                                <option value="{{ $route->id }}" {{ old('route_id', $bus->route_id) == $route->id ? 'selected' : '' }}>{{ $route->sourceDistrict->name }}  {{ $route->destinationDistrict->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('route_id')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                    </div>
+                    <div class="mb-6">
+                        <label for="bus_number" class="block text-sm font-medium text-gray-700 mb-2">Bus Number <span class="text-red-600">*</span></label>
+                        <input type="text" name="bus_number" id="bus_number" value="{{ old('bus_number', $bus->bus_number) }}" class="w-full px-4 py-2.5 border @error('bus_number') border-red-500 @else border-gray-300 @enderror rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" required>
+                        @error('bus_number')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                    </div>
+                    <div class="mb-6">
+                        <label for="bus_model" class="block text-sm font-medium text-gray-700 mb-2">Bus Model <span class="text-red-600">*</span></label>
+                        <input type="text" name="bus_model" id="bus_model" value="{{ old('bus_model', $bus->bus_model) }}" class="w-full px-4 py-2.5 border @error('bus_model') border-red-500 @else border-gray-300 @enderror rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" required>
+                        @error('bus_model')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                    </div>
+                    <div class="mb-6">
+                        <label for="bus_type" class="block text-sm font-medium text-gray-700 mb-2">Bus Type <span class="text-red-600">*</span></label>
+                        <select name="bus_type" id="bus_type" class="w-full px-4 py-2.5 border @error('bus_type') border-red-500 @else border-gray-300 @enderror rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" required>
+                            <option value="">Select Type</option>
+                            <option value="AC" {{ old('bus_type', $bus->bus_type) == 'AC' ? 'selected' : '' }}>AC</option>
+                            <option value="Non-AC" {{ old('bus_type', $bus->bus_type) == 'Non-AC' ? 'selected' : '' }}>Non-AC</option>
+                        </select>
+                        @error('bus_type')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                    </div>
+                    <div class="mb-6">
+                        <label for="total_seats" class="block text-sm font-medium text-gray-700 mb-2">Total Seats <span class="text-red-600">*</span></label>
+                        <input type="number" name="total_seats" id="total_seats" value="{{ old('total_seats', $bus->total_seats) }}" min="10" max="60" class="w-full px-4 py-2.5 border @error('total_seats') border-red-500 @else border-gray-300 @enderror rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" required>
+                        @error('total_seats')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                        <p class="mt-1 text-xs text-gray-500">Min: 10, Max: 60</p>
+                    </div>
+                    <div class="mb-6">
+                        <label for="seat_layout" class="block text-sm font-medium text-gray-700 mb-2">Seat Layout <span class="text-red-600">*</span></label>
+                        <select name="seat_layout" id="seat_layout" class="w-full px-4 py-2.5 border @error('seat_layout') border-red-500 @else border-gray-300 @enderror rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" required>
+                            <option value="">Select Layout</option>
+                            <option value="2x2" {{ old('seat_layout', $bus->seat_layout) == '2x2' ? 'selected' : '' }}>2x2 (4 seats per row)</option>
+                            <option value="2x3" {{ old('seat_layout', $bus->seat_layout) == '2x3' ? 'selected' : '' }}>2x3 (5 seats per row)</option>
+                            <option value="2x1" {{ old('seat_layout', $bus->seat_layout) == '2x1' ? 'selected' : '' }}>2x1 (3 seats per row)</option>
+                        </select>
+                        @error('seat_layout')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                    </div>
+                    <div class="mb-6">
+                        <label for="amenities" class="block text-sm font-medium text-gray-700 mb-2">Amenities</label>
+                        <textarea name="amenities" id="amenities" rows="3" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">{{ old('amenities', $bus->amenities) }}</textarea>
+                        @error('amenities')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                    </div>
+                    <div class="mb-6 bg-gray-50 rounded-lg p-4 border border-gray-200">
+                        <label class="flex items-center cursor-pointer">
+                            <input type="checkbox" name="is_active" value="1" {{ old('is_active', $bus->is_active) ? 'checked' : '' }} class="w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                            <span class="ml-2 text-sm font-medium text-gray-700">Bus is Active</span>
+                        </label>
+                        <p class="mt-1 ml-6 text-xs text-gray-500">Inactive buses won''t be available for scheduling</p>
+                    </div>
+                    <div class="flex justify-end gap-3 pt-6 border-t border-gray-200">
+                        <a href="{{ route('owner.buses.index') }}" class="px-5 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 font-medium">Cancel</a>
+                        <button type="submit" class="px-6 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium">Update Bus</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

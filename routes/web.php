@@ -3,6 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Owner\DashboardController;
+use App\Http\Controllers\Owner\BusCompanyController;
+use App\Http\Controllers\Owner\BusController;
+use App\Http\Controllers\Owner\ScheduleController;
 
 // Guest routes (not logged in)
 Route::middleware('guest')->group(function () {
@@ -24,12 +28,18 @@ Route::get('/', function () {
 })->name('home');
 
 // Owner routes (only accessible by users with role='owner')
-Route::middleware(['auth', 'role:owner'])->prefix('owner')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('owner.dashboard');
-    })->name('owner.dashboard');
+Route::middleware(['auth', 'role:owner'])->prefix('owner')->name('owner.')->group(function () {
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
-    // More owner routes will be added here later
+    // Bus Company Management
+    Route::resource('companies', BusCompanyController::class);
+    
+    // Bus Management
+    Route::resource('buses', BusController::class);
+    
+    // Schedule Management
+    Route::resource('schedules', ScheduleController::class);
 });
 
 // Passenger routes (only accessible by users with role='passenger')
