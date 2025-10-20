@@ -10,6 +10,7 @@ use App\Http\Controllers\Owner\ScheduleController;
 use App\Http\Controllers\Passenger\DashboardController as PassengerDashboardController;
 use App\Http\Controllers\Passenger\SearchController;
 use App\Http\Controllers\Passenger\BusController as PassengerBusController;
+use App\Http\Controllers\Passenger\BookingController;
 
 // Guest routes (not logged in)
 Route::middleware('guest')->group(function () {
@@ -58,6 +59,17 @@ Route::middleware(['auth', 'role:passenger'])->prefix('passenger')->name('passen
         return view('passenger.profile');
     })->name('profile');
     
-    // Booking routes will be added here in next commit
+    // Booking Routes - Seat Selection & Booking Process
+    Route::get('/booking/{schedule}/seats', [BookingController::class, 'showSeatSelection'])->name('booking.seats');
+    Route::post('/booking/{schedule}/seats', [BookingController::class, 'storeSeatSelection'])->name('booking.seats.store');
+    Route::get('/booking/{schedule}/details', [BookingController::class, 'showPassengerDetails'])->name('booking.details');
+    Route::post('/booking/{schedule}/details', [BookingController::class, 'storePassengerDetails'])->name('booking.details.store');
+    Route::get('/booking/{schedule}/confirm', [BookingController::class, 'showConfirmation'])->name('booking.confirm');
+    Route::post('/booking/{schedule}/confirm', [BookingController::class, 'confirmBooking'])->name('booking.confirm.store');
+    
+    // My Bookings - View & Cancel
+    Route::get('/bookings', [BookingController::class, 'myBookings'])->name('bookings.index');
+    Route::get('/bookings/{booking}', [BookingController::class, 'showBooking'])->name('bookings.show');
+    Route::post('/bookings/{booking}/cancel', [BookingController::class, 'cancelBooking'])->name('bookings.cancel');
 });
 

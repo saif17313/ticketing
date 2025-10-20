@@ -165,9 +165,23 @@
                                                 ৳{{ number_format($schedule->base_fare, 0) }}
                                             </span>
                                         </div>
-                                        <button class="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm font-medium">
-                                            Book Now
-                                        </button>
+                                        @auth
+                                            @if(Auth::user()->role === 'passenger')
+                                                <a href="{{ route('passenger.booking.seats', $schedule->id) }}" 
+                                                   class="block w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm font-medium text-center">
+                                                    Book Now
+                                                </a>
+                                            @else
+                                                <button disabled class="w-full px-4 py-2 bg-gray-300 text-gray-500 rounded-lg cursor-not-allowed text-sm font-medium">
+                                                    Passengers Only
+                                                </button>
+                                            @endif
+                                        @else
+                                            <a href="{{ route('login') }}" 
+                                               class="block w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm font-medium text-center">
+                                                Login to Book
+                                            </a>
+                                        @endauth
                                     </div>
                                 @endforeach
                             </div>

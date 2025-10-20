@@ -170,9 +170,23 @@
                                                 class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition text-center font-medium">
                                                 View Details
                                             </a>
-                                            <button class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-medium">
-                                                Book Now
-                                            </button>
+                                            @auth
+                                                @if(Auth::user()->role === 'passenger')
+                                                    <a href="{{ route('passenger.booking.seats', $schedule->id) }}" 
+                                                       class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-medium text-center">
+                                                        Book Now
+                                                    </a>
+                                                @else
+                                                    <button disabled class="px-6 py-2 bg-gray-300 text-gray-500 rounded-lg cursor-not-allowed font-medium">
+                                                        Passengers Only
+                                                    </button>
+                                                @endif
+                                            @else
+                                                <a href="{{ route('login') }}" 
+                                                   class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-medium text-center">
+                                                    Login to Book
+                                                </a>
+                                            @endauth
                                         </div>
                                     </div>
                                 </div>
