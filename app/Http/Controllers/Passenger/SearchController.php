@@ -32,9 +32,9 @@ class SearchController extends Controller
         ]);
         
         // Find the route
-        $route = Route::where('from_district_id', $validated['from_district_id'])
-            ->where('to_district_id', $validated['to_district_id'])
-            ->with(['fromDistrict', 'toDistrict'])
+        $route = Route::where('source_district_id', $validated['from_district_id'])
+            ->where('destination_district_id', $validated['to_district_id'])
+            ->with(['sourceDistrict', 'destinationDistrict'])
             ->first();
         
         if (!$route) {
@@ -60,8 +60,8 @@ class SearchController extends Controller
             })
             ->with([
                 'bus.company',
-                'bus.route.fromDistrict',
-                'bus.route.toDistrict'
+                'bus.route.sourceDistrict',
+                'bus.route.destinationDistrict'
             ]);
         
         // Apply sorting

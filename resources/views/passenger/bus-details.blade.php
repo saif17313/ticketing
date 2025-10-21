@@ -65,7 +65,7 @@
                         <div class="bg-gray-50 rounded-lg p-4 mb-6">
                             <div class="flex items-center justify-between">
                                 <div class="text-center">
-                                    <p class="text-2xl font-bold text-gray-800">{{ $bus->route->fromDistrict->name }}</p>
+                                    <p class="text-2xl font-bold text-gray-800">{{ $bus->route->sourceDistrict->name }}</p>
                                     <p class="text-sm text-gray-600">Starting Point</p>
                                 </div>
                                 <div class="flex-1 mx-6 border-t-2 border-dashed border-gray-300 relative">
@@ -74,7 +74,7 @@
                                     </div>
                                 </div>
                                 <div class="text-center">
-                                    <p class="text-2xl font-bold text-gray-800">{{ $bus->route->toDistrict->name }}</p>
+                                    <p class="text-2xl font-bold text-gray-800">{{ $bus->route->destinationDistrict->name }}</p>
                                     <p class="text-sm text-gray-600">Destination</p>
                                 </div>
                             </div>

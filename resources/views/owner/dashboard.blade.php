@@ -49,88 +49,88 @@
             <!-- Statistics Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
                 <!-- Total Companies -->
-                <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-6 border border-gray-100">
+                <div class="bg-white rounded-xl shadow hover:shadow-lg transition p-6 border border-gray-200">
                     <div class="text-center">
-                        <div class="bg-green-100 rounded-full p-3 w-16 h-16 mx-auto mb-3 flex items-center justify-center">
-                            <span class="text-3xl">🏢</span>
+                        <div class="bg-gray-100 rounded-full p-3 w-14 h-14 mx-auto mb-3 flex items-center justify-center">
+                            <span class="text-2xl">🏢</span>
                         </div>
-                        <p class="text-gray-500 text-sm font-medium mb-1">Companies</p>
-                        <p class="text-3xl font-bold text-green-600">{{ $totalCompanies }}</p>
+                        <p class="text-gray-600 text-xs font-medium mb-1 uppercase">Companies</p>
+                        <p class="text-3xl font-bold text-gray-800">{{ $totalCompanies }}</p>
                     </div>
                 </div>
 
                 <!-- Total Buses -->
-                <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-6 border border-gray-100">
+                <div class="bg-white rounded-xl shadow hover:shadow-lg transition p-6 border border-gray-200">
                     <div class="text-center">
-                        <div class="bg-blue-100 rounded-full p-3 w-16 h-16 mx-auto mb-3 flex items-center justify-center">
-                            <span class="text-3xl">🚌</span>
+                        <div class="bg-gray-100 rounded-full p-3 w-14 h-14 mx-auto mb-3 flex items-center justify-center">
+                            <span class="text-2xl">🚌</span>
                         </div>
-                        <p class="text-gray-500 text-sm font-medium mb-1">Buses</p>
-                        <p class="text-3xl font-bold text-blue-600">{{ $totalBuses }}</p>
+                        <p class="text-gray-600 text-xs font-medium mb-1 uppercase">Buses</p>
+                        <p class="text-3xl font-bold text-gray-800">{{ $totalBuses }}</p>
                     </div>
                 </div>
 
                 <!-- Active Schedules -->
-                <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-6 border border-gray-100">
+                <div class="bg-white rounded-xl shadow hover:shadow-lg transition p-6 border border-gray-200">
                     <div class="text-center">
-                        <div class="bg-orange-100 rounded-full p-3 w-16 h-16 mx-auto mb-3 flex items-center justify-center">
-                            <span class="text-3xl">📅</span>
+                        <div class="bg-gray-100 rounded-full p-3 w-14 h-14 mx-auto mb-3 flex items-center justify-center">
+                            <span class="text-2xl">📅</span>
                         </div>
-                        <p class="text-gray-500 text-sm font-medium mb-1">Schedules</p>
-                        <p class="text-3xl font-bold text-orange-600">{{ $totalSchedules }}</p>
+                        <p class="text-gray-600 text-xs font-medium mb-1 uppercase">Schedules</p>
+                        <p class="text-3xl font-bold text-gray-800">{{ $totalSchedules }}</p>
                     </div>
                 </div>
 
                 <!-- Total Bookings -->
-                <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-6 border border-gray-100">
+                <div class="bg-white rounded-xl shadow hover:shadow-lg transition p-6 border border-gray-200">
                     <div class="text-center">
-                        <div class="bg-purple-100 rounded-full p-3 w-16 h-16 mx-auto mb-3 flex items-center justify-center">
-                            <span class="text-3xl">🎫</span>
+                        <div class="bg-gray-100 rounded-full p-3 w-14 h-14 mx-auto mb-3 flex items-center justify-center">
+                            <span class="text-2xl">🎫</span>
                         </div>
-                        <p class="text-gray-500 text-sm font-medium mb-1">Bookings</p>
-                        <p class="text-3xl font-bold text-purple-600">{{ $totalBookings }}</p>
+                        <p class="text-gray-600 text-xs font-medium mb-1 uppercase">Bookings</p>
+                        <p class="text-3xl font-bold text-gray-800">{{ $totalBookings }}</p>
                     </div>
                 </div>
 
                 <!-- Total Revenue -->
-                <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-6 border border-gray-100">
+                <div class="bg-white rounded-xl shadow hover:shadow-lg transition p-6 border border-gray-200">
                     <div class="text-center">
-                        <div class="bg-teal-100 rounded-full p-3 w-16 h-16 mx-auto mb-3 flex items-center justify-center">
-                            <span class="text-3xl">💰</span>
+                        <div class="bg-gray-100 rounded-full p-3 w-14 h-14 mx-auto mb-3 flex items-center justify-center">
+                            <span class="text-2xl">💰</span>
                         </div>
-                        <p class="text-gray-500 text-sm font-medium mb-1">Revenue</p>
-                        <p class="text-2xl font-bold text-teal-600">৳{{ number_format($totalRevenue, 0) }}</p>
+                        <p class="text-gray-600 text-xs font-medium mb-1 uppercase">Revenue</p>
+                        <p class="text-2xl font-bold text-gray-800">৳{{ number_format($totalRevenue, 0) }}</p>
                     </div>
                 </div>
             </div>
 
             <!-- Today's Stats -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl shadow-lg p-6 text-white">
+                <div class="bg-gradient-to-br from-green-600 to-green-700 rounded-xl shadow-lg p-6 text-white">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-green-100 text-sm mb-1">📅 Today's Bookings</p>
+                            <p class="text-green-100 text-sm mb-1 font-medium">📅 Today's Bookings</p>
                             <p class="text-4xl font-bold">{{ $todayBookings }}</p>
                         </div>
-                        <div class="text-6xl opacity-20">🎫</div>
+                        <div class="text-6xl opacity-10">🎫</div>
                     </div>
                 </div>
-                <div class="bg-gradient-to-br from-teal-500 to-teal-600 rounded-2xl shadow-lg p-6 text-white">
+                <div class="bg-gradient-to-br from-green-600 to-green-700 rounded-xl shadow-lg p-6 text-white">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-teal-100 text-sm mb-1">💵 Today's Revenue</p>
+                            <p class="text-green-100 text-sm mb-1 font-medium">💵 Today's Revenue</p>
                             <p class="text-4xl font-bold">৳{{ number_format($todayRevenue, 0) }}</p>
                         </div>
-                        <div class="text-6xl opacity-20">💰</div>
+                        <div class="text-6xl opacity-10">💰</div>
                     </div>
                 </div>
             </div>
 
             <!-- Sales by Route -->
             @if($salesByRoute->count() > 0)
-            <div class="bg-white rounded-2xl shadow-md p-6 mb-8 border border-gray-100">
-                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                    <span class="bg-green-100 text-green-600 rounded-lg px-3 py-1 text-sm mr-3">📊 Top Routes by Revenue</span>
+            <div class="bg-white rounded-xl shadow p-6 mb-8 border border-gray-200">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">
+                    📊 Top Routes by Revenue
                 </h3>
                 <div class="overflow-x-auto">
                     <table class="min-w-full">
@@ -168,9 +168,9 @@
 
             <!-- Recent Bookings -->
             @if($recentBookings->count() > 0)
-            <div class="bg-white rounded-2xl shadow-md p-6 mb-8 border border-gray-100">
-                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                    <span class="bg-green-100 text-green-600 rounded-lg px-3 py-1 text-sm mr-3">🎫 Recent Bookings</span>
+            <div class="bg-white rounded-xl shadow p-6 mb-8 border border-gray-200">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">
+                    🎫 Recent Bookings
                 </h3>
                 <div class="overflow-x-auto">
                     <table class="min-w-full">
@@ -215,37 +215,161 @@
             @endif
 
             <!-- Quick Actions -->
-            <div class="bg-white rounded-2xl shadow-md p-6 mb-8 border border-gray-100">
-                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                    <span class="bg-green-100 text-green-600 rounded-lg px-3 py-1 text-sm mr-3">Quick Actions</span>
-                </h3>
+            <div class="bg-white rounded-xl shadow p-6 mb-8 border border-gray-200">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">Quick Actions</h3>
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <a href="{{ route('owner.companies.create') }}" class="group bg-gradient-to-br from-green-500 to-green-600 text-white text-center py-4 px-6 rounded-xl hover:from-green-600 hover:to-green-700 transition shadow-md hover:shadow-lg transform hover:-translate-y-1">
+                    <a href="{{ route('owner.companies.create') }}" class="group bg-white border-2 border-gray-300 hover:border-green-500 text-center py-4 px-6 rounded-lg hover:bg-gray-50 transition">
                         <div class="text-3xl mb-2">🏢</div>
-                        <div class="font-semibold">Add Company</div>
+                        <div class="font-semibold text-gray-700 group-hover:text-green-600">Add Company</div>
                     </a>
-                    <a href="{{ route('owner.buses.create') }}" class="group bg-gradient-to-br from-blue-500 to-blue-600 text-white text-center py-4 px-6 rounded-xl hover:from-blue-600 hover:to-blue-700 transition shadow-md hover:shadow-lg transform hover:-translate-y-1">
+                    <a href="{{ route('owner.buses.create') }}" class="group bg-white border-2 border-gray-300 hover:border-green-500 text-center py-4 px-6 rounded-lg hover:bg-gray-50 transition">
                         <div class="text-3xl mb-2">🚌</div>
-                        <div class="font-semibold">Add Bus</div>
+                        <div class="font-semibold text-gray-700 group-hover:text-green-600">Add Bus</div>
                     </a>
-                    <a href="{{ route('owner.schedules.create') }}" class="group bg-gradient-to-br from-orange-500 to-orange-600 text-white text-center py-4 px-6 rounded-xl hover:from-orange-600 hover:to-orange-700 transition shadow-md hover:shadow-lg transform hover:-translate-y-1">
+                    <a href="{{ route('owner.schedules.create') }}" class="group bg-white border-2 border-gray-300 hover:border-green-500 text-center py-4 px-6 rounded-lg hover:bg-gray-50 transition">
                         <div class="text-3xl mb-2">📅</div>
-                        <div class="font-semibold">Add Schedule</div>
+                        <div class="font-semibold text-gray-700 group-hover:text-green-600">Add Schedule</div>
                     </a>
-                    <a href="{{ route('owner.companies.index') }}" class="group bg-gradient-to-br from-gray-500 to-gray-600 text-white text-center py-4 px-6 rounded-xl hover:from-gray-600 hover:to-gray-700 transition shadow-md hover:shadow-lg transform hover:-translate-y-1">
+                    <a href="{{ route('owner.companies.index') }}" class="group bg-white border-2 border-gray-300 hover:border-green-500 text-center py-4 px-6 rounded-lg hover:bg-gray-50 transition">
                         <div class="text-3xl mb-2">📊</div>
-                        <div class="font-semibold">View All</div>
+                        <div class="font-semibold text-gray-700 group-hover:text-green-600">View All</div>
                     </a>
                 </div>
             </div>
 
-            <!-- Recent Companies -->
-            <div class="bg-white rounded-2xl shadow-md p-6 border border-gray-100">
+            <!-- My Buses -->
+            <div class="bg-white rounded-xl shadow p-6 mb-8 border border-gray-200">
                 <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-xl font-bold text-gray-800 flex items-center">
-                        <span class="bg-green-100 text-green-600 rounded-lg px-3 py-1 text-sm mr-3">Recent Companies</span>
+                    <h3 class="text-lg font-bold text-gray-800">
+                        🚌 My Buses
                     </h3>
-                    <a href="{{ route('owner.companies.index') }}" class="text-green-600 hover:text-green-700 font-semibold text-sm">View All →</a>
+                    <div class="flex gap-2">
+                        <a href="{{ route('owner.buses.create') }}" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition font-semibold text-sm">+ Add Bus</a>
+                        <a href="{{ route('owner.buses.index') }}" class="text-green-600 hover:text-green-700 font-semibold text-sm">View All →</a>
+                    </div>
+                </div>
+                @if($myBuses->count() > 0)
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        @foreach($myBuses as $bus)
+                        <div class="border border-gray-200 rounded-xl p-4 hover:shadow-md transition">
+                            <div class="flex items-start justify-between mb-3">
+                                <div>
+                                    <h4 class="font-bold text-gray-800">{{ $bus->bus_number }}</h4>
+                                    <p class="text-sm text-gray-500">{{ $bus->company->name }}</p>
+                                </div>
+                                <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-semibold">
+                                    {{ $bus->bus_type }}
+                                </span>
+                            </div>
+                            <div class="space-y-2 mb-3">
+                                <div class="flex items-center text-sm text-gray-600">
+                                    <span class="mr-2">🗺️</span>
+                                    <span>{{ $bus->route->districts->first()->name }} → {{ $bus->route->districts->last()->name }}</span>
+                                </div>
+                                <div class="flex items-center text-sm text-gray-600">
+                                    <span class="mr-2">💺</span>
+                                    <span>{{ $bus->total_seats }} seats</span>
+                                </div>
+                                <div class="flex items-center text-sm font-semibold text-green-600">
+                                    <span class="mr-2">💰</span>
+                                    <span>৳{{ number_format($bus->fare_per_seat, 0) }}/seat</span>
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <a href="{{ route('owner.buses.edit', $bus) }}" class="flex-1 text-center bg-gray-100 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-200 transition text-sm font-semibold">
+                                    ✏️ Edit
+                                </a>
+                                <a href="{{ route('owner.schedules.create') }}?bus_id={{ $bus->id }}" class="flex-1 text-center bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 transition text-sm font-semibold">
+                                    📅 Schedule
+                                </a>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="text-center py-12">
+                        <div class="text-6xl mb-4">🚌</div>
+                        <p class="text-gray-500 text-lg mb-4">No buses added yet</p>
+                        <a href="{{ route('owner.buses.create') }}" class="inline-block bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition font-semibold">
+                            + Add Your First Bus
+                        </a>
+                    </div>
+                @endif
+            </div>
+
+            <!-- Upcoming Schedules -->
+            <div class="bg-white rounded-xl shadow p-6 mb-8 border border-gray-200">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-bold text-gray-800">
+                        📅 Upcoming Schedules
+                    </h3>
+                    <div class="flex gap-2">
+                        <a href="{{ route('owner.schedules.create') }}" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition font-semibold text-sm">+ Add Schedule</a>
+                        <a href="{{ route('owner.schedules.index') }}" class="text-green-600 hover:text-green-700 font-semibold text-sm">View All →</a>
+                    </div>
+                </div>
+                @if($upcomingSchedules->count() > 0)
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Date & Time</th>
+                                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Bus & Route</th>
+                                    <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase">Seats</th>
+                                    <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase">Fare</th>
+                                    <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                @foreach($upcomingSchedules as $schedule)
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-3">
+                                        <div class="text-sm font-semibold text-gray-800">{{ \Carbon\Carbon::parse($schedule->journey_date)->format('M d, Y') }}</div>
+                                        <div class="text-xs text-gray-500">{{ \Carbon\Carbon::parse($schedule->departure_time)->format('h:i A') }} - {{ \Carbon\Carbon::parse($schedule->arrival_time)->format('h:i A') }}</div>
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        <div class="text-sm font-semibold text-gray-800">{{ $schedule->bus->bus_number }}</div>
+                                        <div class="text-xs text-gray-500">{{ $schedule->bus->route->districts->first()->name }} → {{ $schedule->bus->route->districts->last()->name }}</div>
+                                    </td>
+                                    <td class="px-4 py-3 text-center">
+                                        <span class="text-sm">
+                                            <span class="font-semibold text-gray-800">{{ $schedule->available_seats }}</span>
+                                            <span class="text-gray-400">/</span>
+                                            <span class="text-gray-600">{{ $schedule->bus->total_seats }}</span>
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 text-center">
+                                        <span class="text-sm font-semibold text-gray-800">৳{{ number_format($schedule->bus->fare_per_seat, 0) }}</span>
+                                    </td>
+                                    <td class="px-4 py-3 text-center">
+                                        <a href="{{ route('owner.schedules.edit', $schedule) }}" class="inline-block bg-gray-100 text-gray-700 px-4 py-1 rounded hover:bg-gray-200 font-semibold text-sm">Edit</a>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <div class="text-center py-12">
+                        <div class="text-6xl mb-4">📅</div>
+                        <p class="text-gray-500 text-lg mb-4">No upcoming schedules</p>
+                        <a href="{{ route('owner.schedules.create') }}" class="inline-block bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600 transition font-semibold">
+                            + Create Schedule
+                        </a>
+                    </div>
+                @endif
+            </div>
+
+            <!-- Recent Companies -->
+            <div class="bg-white rounded-xl shadow p-6 border border-gray-200">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-bold text-gray-800">
+                        🏢 My Companies
+                    </h3>
+                    <div class="flex gap-2">
+                        <a href="{{ route('owner.companies.create') }}" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition font-semibold text-sm">+ Add Company</a>
+                        <a href="{{ route('owner.companies.index') }}" class="text-green-600 hover:text-green-700 font-semibold text-sm">View All →</a>
+                    </div>
                 </div>
                 @if($recentCompanies->count() > 0)
                     <div class="overflow-x-auto">

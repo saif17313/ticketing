@@ -15,8 +15,8 @@ class BusController extends Controller
         // Load all relationships
         $bus->load([
             'company',
-            'route.fromDistrict',
-            'route.toDistrict'
+            'route.sourceDistrict',
+            'route.destinationDistrict'
         ]);
         
         // Get upcoming schedules for this bus (next 7 days)

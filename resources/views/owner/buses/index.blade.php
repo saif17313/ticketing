@@ -8,18 +8,22 @@
 </head>
 <body class="bg-gray-50">
     <div class="min-h-screen">
-        <header class="bg-white shadow-sm border-b border-gray-200">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <header class="bg-gradient-to-r from-green-600 to-green-700 shadow-lg">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
                 <div class="flex justify-between items-center">
                     <div>
-                        <h1 class="text-2xl font-bold text-gray-800">My Buses</h1>
-                        <p class="text-sm text-gray-600 mt-1">Manage your fleet</p>
+                        <h1 class="text-3xl font-bold text-white">🚌 My Buses</h1>
+                        <p class="text-green-100 text-sm mt-1">Manage your fleet</p>
                     </div>
-                    <div class="flex items-center gap-3">
-                        <a href="{{ route('owner.dashboard') }}" class="text-gray-600 hover:text-gray-900 font-medium"> Dashboard</a>
+                    <div class="flex items-center gap-4">
+                        <a href="{{ route('owner.dashboard') }}" class="bg-white text-green-600 px-4 py-2 rounded-lg hover:bg-green-50 transition font-semibold">
+                            ← Dashboard
+                        </a>
                         <form method="POST" action="{{ route('logout') }}" class="inline">
                             @csrf
-                            <button type="submit" class="text-gray-600 hover:text-gray-900 font-medium">Logout</button>
+                            <button type="submit" class="bg-green-800 text-white px-4 py-2 rounded-lg hover:bg-green-900 transition font-semibold">
+                                Logout
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -27,21 +31,26 @@
         </header>
         <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             @if(session('success'))
-                <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-6 rounded-r">
-                    <p class="text-green-800 font-medium">{{ session('success') }}</p>
+                <div class="bg-green-50 border-l-4 border-green-500 text-green-800 p-4 mb-6 rounded-lg shadow-sm">
+                    <div class="flex items-center">
+                        <span class="text-2xl mr-3">✓</span>
+                        <p class="font-semibold">{{ session('success') }}</p>
+                    </div>
                 </div>
             @endif
-            <div class="bg-white rounded-lg shadow-sm p-6 mb-6 border border-gray-200">
+            <div class="bg-white rounded-xl shadow p-6 mb-6 border border-gray-200">
                 <div class="flex flex-col md:flex-row justify-between items-center gap-4">
                     <div>
-                        <h2 class="text-lg font-bold text-gray-800">All Buses</h2>
-                        <p class="text-sm text-gray-600 mt-1">Total: {{ $buses->total() }} buses</p>
+                        <h2 class="text-xl font-bold text-gray-800">All Buses</h2>
+                        <p class="text-gray-500 text-sm mt-1">Total: {{ $buses->total() }} buses</p>
                     </div>
-                    <a href="{{ route('owner.buses.create') }}" class="bg-green-600 text-white px-5 py-2.5 rounded-lg hover:bg-green-700 transition font-medium">+ Add New Bus</a>
+                    <a href="{{ route('owner.buses.create') }}" class="bg-green-600 text-white px-6 py-3 rounded-xl hover:bg-green-700 transition font-semibold shadow-md hover:shadow-lg">
+                        + Add New Bus
+                    </a>
                 </div>
             </div>
             @if($buses->count() > 0)
-                <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
+                <div class="bg-white rounded-xl shadow overflow-hidden border border-gray-200">
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
@@ -97,11 +106,13 @@
                     <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">{{ $buses->links() }}</div>
                 </div>
             @else
-                <div class="bg-white rounded-lg shadow-sm p-12 text-center border border-gray-200">
-                    <div class="text-5xl mb-4"></div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-2">No Buses Yet</h3>
-                    <p class="text-gray-600 mb-6">Start by adding your first bus</p>
-                    <a href="{{ route('owner.buses.create') }}" class="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 font-medium">+ Add First Bus</a>
+                <div class="bg-white rounded-xl shadow p-12 text-center border border-gray-200">
+                    <div class="text-7xl mb-4">🚌</div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">No Buses Yet</h3>
+                    <p class="text-gray-500 mb-6">Start by adding your first bus to your fleet</p>
+                    <a href="{{ route('owner.buses.create') }}" class="inline-block bg-green-600 text-white px-8 py-4 rounded-xl hover:bg-green-700 transition font-semibold shadow-lg">
+                        + Add First Bus
+                    </a>
                 </div>
             @endif
         </main>

@@ -15,7 +15,7 @@ class DashboardController extends Controller
         $districts = District::orderBy('name')->get();
         
         // Get popular routes (routes with most schedules)
-        $popularRoutes = Route::with(['fromDistrict', 'toDistrict'])
+        $popularRoutes = Route::with(['sourceDistrict', 'destinationDistrict'])
             ->withCount('buses')
             ->having('buses_count', '>', 0)
             ->orderByDesc('buses_count')

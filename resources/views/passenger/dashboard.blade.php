@@ -13,18 +13,33 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
                 <div class="flex justify-between items-center">
                     <div>
-                        <h1 class="text-2xl font-bold text-gray-800">🎫 BD Bus Tickets</h1>
+                        <a href="{{ route('home') }}" class="text-2xl font-bold text-gray-800 hover:text-green-600">
+                            🎫 BD Bus Tickets
+                        </a>
                     </div>
                     <div class="flex items-center gap-4">
                         @auth
-                            <span class="text-sm text-gray-600">Welcome, {{ auth()->user()->name }}</span>
+                            <span class="text-sm text-gray-600">Welcome, {{ auth()->user()->name }}!</span>
+                            @if(auth()->user()->role === 'owner')
+                                <a href="{{ route('owner.dashboard') }}" 
+                                   class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition text-sm font-medium">
+                                    🏢 Dashboard
+                                </a>
+                            @else
+                                <a href="{{ route('passenger.dashboard') }}" 
+                                   class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition text-sm font-medium">
+                                    👤 My Profile
+                                </a>
+                            @endif
                             <form method="POST" action="{{ route('logout') }}" class="inline">
                                 @csrf
-                                <button type="submit" class="text-sm text-gray-600 hover:text-gray-800">Logout</button>
+                                <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm font-medium">
+                                    Logout
+                                </button>
                             </form>
                         @else
                             <a href="{{ route('login') }}" class="text-sm text-gray-600 hover:text-gray-800">Login</a>
-                            <a href="{{ route('register') }}" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Register</a>
+                            <a href="{{ route('register') }}" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium">Register</a>
                         @endauth
                     </div>
                 </div>
@@ -127,11 +142,11 @@
                         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition">
                             <div class="flex items-center justify-between mb-4">
                                 <h4 class="text-lg font-bold text-gray-800">
-                                    {{ $route->fromDistrict->name }}
+                                    {{ $route->sourceDistrict->name }}
                                 </h4>
                                 <span class="text-gray-400">→</span>
                                 <h4 class="text-lg font-bold text-gray-800">
-                                    {{ $route->toDistrict->name }}
+                                    {{ $route->destinationDistrict->name }}
                                 </h4>
                             </div>
                             <div class="flex items-center justify-between text-sm text-gray-600">
@@ -140,8 +155,8 @@
                             </div>
                             <form method="POST" action="{{ route('search.buses') }}" class="mt-4">
                                 @csrf
-                                <input type="hidden" name="from_district_id" value="{{ $route->from_district_id }}">
-                                <input type="hidden" name="to_district_id" value="{{ $route->to_district_id }}">
+                                <input type="hidden" name="from_district_id" value="{{ $route->source_district_id }}">
+                                <input type="hidden" name="to_district_id" value="{{ $route->destination_district_id }}">
                                 <input type="hidden" name="journey_date" value="{{ date('Y-m-d') }}">
                                 <button type="submit" class="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm font-medium">
                                     Search Buses

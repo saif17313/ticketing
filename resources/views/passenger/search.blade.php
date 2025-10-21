@@ -13,20 +13,33 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
                 <div class="flex justify-between items-center">
                     <div>
-                        <a href="{{ route('passenger.dashboard') }}" class="text-2xl font-bold text-gray-800 hover:text-green-600">
+                        <a href="{{ route('home') }}" class="text-2xl font-bold text-gray-800 hover:text-green-600">
                             🎫 BD Bus Tickets
                         </a>
                     </div>
                     <div class="flex items-center gap-4">
                         @auth
-                            <span class="text-sm text-gray-600">{{ auth()->user()->name }}</span>
+                            <span class="text-sm text-gray-600">Welcome, {{ auth()->user()->name }}!</span>
+                            @if(auth()->user()->role === 'owner')
+                                <a href="{{ route('owner.dashboard') }}" 
+                                   class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition text-sm font-medium">
+                                    🏢 Dashboard
+                                </a>
+                            @else
+                                <a href="{{ route('passenger.dashboard') }}" 
+                                   class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition text-sm font-medium">
+                                    👤 My Profile
+                                </a>
+                            @endif
                             <form method="POST" action="{{ route('logout') }}" class="inline">
                                 @csrf
-                                <button type="submit" class="text-sm text-gray-600 hover:text-gray-800">Logout</button>
+                                <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm font-medium">
+                                    Logout
+                                </button>
                             </form>
                         @else
                             <a href="{{ route('login') }}" class="text-sm text-gray-600 hover:text-gray-800">Login</a>
-                            <a href="{{ route('register') }}" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm">Register</a>
+                            <a href="{{ route('register') }}" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium">Register</a>
                         @endauth
                     </div>
                 </div>

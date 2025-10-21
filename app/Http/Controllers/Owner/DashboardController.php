@@ -92,6 +92,22 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
+        // My Buses - Latest 5 buses
+        $myBuses = Bus::whereHas('company', function($q) use ($owner) {
+            $q->where('owner_id', $owner->id);
+        })->with(['company', 'route.districts'])->latest()->take(5)->get();
+
+        // Upcoming Schedules - Next 6 schedules
+        $upcomingSchedules = BusSchedule::whereHas('bus.company', function($q) use ($owner) {
+            $q->where('owner_id', $owner->id);
+        })
+        ->with(['bus.company', 'bus.route.districts'])
+        ->where('journey_date', '>=', now()->toDateString())
+        ->orderBy('journey_date')
+        ->orderBy('departure_time')
+        ->take(6)
+        ->get();
+
         return view('owner.dashboard', compact(
             'totalCompanies',
             'totalBuses',
@@ -102,7 +118,9 @@ class DashboardController extends Controller
             'todayRevenue',
             'salesByRoute',
             'recentBookings',
-            'recentCompanies'
+            'recentCompanies',
+            'myBuses',
+            'upcomingSchedules'
         ));
     }
 }
