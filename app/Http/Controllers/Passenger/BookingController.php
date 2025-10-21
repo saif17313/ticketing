@@ -235,6 +235,12 @@ class BookingController extends Controller
             // Clear session
             $this->clearBookingSession();
 
+            // Redirect based on booking type
+            if ($bookingType === 'direct_pay') {
+                return redirect()->route('passenger.booking.payment', $booking)
+                    ->with('success', '✅ Booking created! Please complete payment to confirm.');
+            }
+
             return redirect()->route('passenger.bookings.show', $booking)
                 ->with('success', '🎉 Booking successful! Your booking reference: ' . $booking->booking_reference);
         } catch (\Exception $e) {

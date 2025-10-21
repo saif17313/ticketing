@@ -15,6 +15,20 @@ class UserAndCompanySeeder extends Seeder
      */
     public function run(): void
     {
+        // Create admin user
+        DB::table('users')->insert([
+            'name' => 'System Administrator',
+            'email' => 'admin@bdbus.com',
+            'password' => Hash::make('admin123'),
+            'role' => 'admin',
+            'phone' => '01700000000',
+            'address' => 'System Admin',
+            'nid' => '0000000000000',
+            'is_active' => true,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        
         // Create sample passenger user for testing
         $passengerId = DB::table('users')->insertGetId([
             'name' => 'Ahmed Hassan',
