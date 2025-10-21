@@ -26,7 +26,7 @@ class DashboardController extends Controller
         
         $totalSchedules = BusSchedule::whereHas('bus.company', function($query) use ($owner) {
             $query->where('owner_id', $owner->id);
-        })->where('departure_date', '>=', now()->toDateString())->count();
+        })->where('journey_date', '>=', now()->toDateString())->count();
 
         // Get total bookings and revenue
         $totalBookings = Booking::whereHas('busSchedule.bus.company', function($query) use ($owner) {
