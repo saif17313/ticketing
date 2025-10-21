@@ -67,7 +67,7 @@
                         <div>
                             <p class="text-sm text-gray-600 mb-1">📅 Journey Date</p>
                             <p class="font-bold text-gray-800">
-                                {{ \Carbon\Carbon::parse($booking->busSchedule->departure_date)->format('d M Y') }}
+                                {{ \Carbon\Carbon::parse($booking->busSchedule->journey_date)->format('d M Y') }}
                             </p>
                         </div>
                         <div>

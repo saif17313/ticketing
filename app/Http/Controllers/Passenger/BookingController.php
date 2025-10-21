@@ -162,7 +162,7 @@ class BookingController extends Controller
         // Get selected seats
         $seats = Seat::whereIn('id', session('booking_seats'))->get();
         $totalAmount = $seats->sum(function ($seat) use ($schedule) {
-            return $schedule->fare;
+            return $schedule->base_fare;
         });
 
         return view('passenger.booking.passenger-details', compact('schedule', 'seats', 'totalAmount'));
@@ -204,7 +204,7 @@ class BookingController extends Controller
 
         $seats = Seat::whereIn('id', session('booking_seats'))->get();
         $totalAmount = $seats->sum(function ($seat) use ($schedule) {
-            return $schedule->fare;
+            return $schedule->base_fare;
         });
 
         $passengerDetails = session('passenger_details');
@@ -245,7 +245,7 @@ class BookingController extends Controller
                 }
             }
 
-            $totalAmount = $seats->count() * $schedule->fare;
+            $totalAmount = $seats->count() * $schedule->base_fare;
             $bookingType = session('booking_type');
 
             // Create booking

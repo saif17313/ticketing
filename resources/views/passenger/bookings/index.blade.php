@@ -73,19 +73,23 @@
                                     <div>
                                         @if($booking->status === 'confirmed')
                                             <span class="px-4 py-2 bg-green-100 text-green-700 rounded-full font-bold text-sm">
-                                                ✅ Confirmed
+                                                ✅ Paid
                                             </span>
                                         @elseif($booking->status === 'pending')
-                                            <span class="px-4 py-2 bg-yellow-100 text-yellow-700 rounded-full font-bold text-sm">
-                                                ⏳ Pending
+                                            <span class="px-4 py-2 bg-orange-100 text-orange-700 rounded-full font-bold text-sm">
+                                                💳 Unpaid
                                             </span>
                                         @elseif($booking->status === 'cancelled')
                                             <span class="px-4 py-2 bg-red-100 text-red-700 rounded-full font-bold text-sm">
                                                 ❌ Cancelled
                                             </span>
+                                        @elseif($booking->status === 'expired')
+                                            <span class="px-4 py-2 bg-gray-100 text-gray-700 rounded-full font-bold text-sm">
+                                                ⏰ Cancelled
+                                            </span>
                                         @else
                                             <span class="px-4 py-2 bg-gray-100 text-gray-700 rounded-full font-bold text-sm">
-                                                ⏰ Expired
+                                                {{ ucfirst($booking->status) }}
                                             </span>
                                         @endif
                                     </div>
@@ -102,7 +106,7 @@
                                     <div>
                                         <p class="text-sm text-gray-600 mb-1">📅 Journey Date</p>
                                         <p class="font-bold text-gray-800">
-                                            {{ \Carbon\Carbon::parse($booking->busSchedule->departure_date)->format('d M Y') }}
+                                            {{ \Carbon\Carbon::parse($booking->busSchedule->journey_date)->format('d M Y') }}
                                         </p>
                                     </div>
                                     <div>
@@ -156,6 +160,17 @@
                                                 <a href="{{ route('passenger.booking.payment', $booking) }}" 
                                                    class="px-6 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg hover:from-orange-600 hover:to-orange-700 transition font-semibold shadow-md">
                                                     💳 Pay Now
+                                                </a>
+                                            @endif
+                                            
+                                            <!-- Download PDF Button for Confirmed Bookings -->
+                                            @if($booking->status === 'confirmed')
+                                                <a href="{{ route('passenger.booking.invoice', $booking) }}" 
+                                                   class="inline-flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-black rounded-lg hover:from-blue-700 hover:to-indigo-700 transition font-semibold shadow-md">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+                                                    </svg>
+                                                    Download PDF
                                                 </a>
                                             @endif
                                             

@@ -32,12 +32,12 @@
                         <p class="font-bold text-gray-800">
                             {{ $schedule->bus->route->sourceDistrict->name }} → {{ $schedule->bus->route->destinationDistrict->name }}
                         </p>
-                        <p class="text-sm text-gray-600">{{ \Carbon\Carbon::parse($schedule->departure_date)->format('d M Y') }}</p>
+                        <p class="text-sm text-gray-600">{{ \Carbon\Carbon::parse($schedule->journey_date)->format('d M Y') }}</p>
                     </div>
                     <div>
                         <p class="text-sm text-gray-600 mb-1">🕐 Departure</p>
                         <p class="font-bold text-gray-800">{{ \Carbon\Carbon::parse($schedule->departure_time)->format('h:i A') }}</p>
-                        <p class="text-sm text-gray-600">Fare: ৳{{ number_format($schedule->fare, 2) }} per seat</p>
+                        <p class="text-sm text-gray-600">Fare: ৳{{ number_format($schedule->base_fare, 2) }} per seat</p>
                     </div>
                 </div>
             </div>
@@ -253,7 +253,7 @@
                         <div class="space-y-4 mb-6">
                             <div class="flex justify-between">
                                 <span>Journey Date:</span>
-                                <span class="font-bold">{{ \Carbon\Carbon::parse($schedule->departure_date)->format('d M Y') }}</span>
+                                <span class="font-bold">{{ \Carbon\Carbon::parse($schedule->journey_date)->format('d M Y') }}</span>
                             </div>
                             <div class="flex justify-between">
                                 <span>Departure:</span>
@@ -261,7 +261,7 @@
                             </div>
                             <div class="flex justify-between">
                                 <span>Fare per Seat:</span>
-                                <span class="font-bold">৳{{ number_format($schedule->fare, 2) }}</span>
+                                <span class="font-bold">৳{{ number_format($schedule->base_fare, 2) }}</span>
                             </div>
                         </div>
 
@@ -287,7 +287,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const farePerSeat = parseFloat('{{ $schedule->fare }}');
+            const farePerSeat = parseFloat('{{ $schedule->base_fare }}');
             const checkboxes = document.querySelectorAll('.seat-checkbox');
             const submitBtn = document.getElementById('submitBtn');
             const selectedInfo = document.getElementById('selectedInfo');

@@ -157,7 +157,7 @@
                             <div>
                                 <p class="text-green-100">📅 Date & Time</p>
                                 <p class="font-bold">
-                                    {{ \Carbon\Carbon::parse($schedule->departure_date)->format('d M Y') }}<br>
+                                    {{ \Carbon\Carbon::parse($schedule->journey_date)->format('d M Y') }}<br>
                                     {{ \Carbon\Carbon::parse($schedule->departure_time)->format('h:i A') }}
                                 </p>
                             </div>
@@ -170,7 +170,7 @@
                             </div>
                             <div class="flex justify-between mb-2">
                                 <span>Fare per Seat:</span>
-                                <span class="font-bold">৳{{ number_format($schedule->fare, 2) }}</span>
+                                <span class="font-bold">৳{{ number_format($schedule->base_fare, 2) }}</span>
                             </div>
                             <div class="flex justify-between mb-2">
                                 <span>Total Seats:</span>

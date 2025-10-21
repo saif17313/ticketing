@@ -51,7 +51,7 @@
                         <div>
                             <p class="text-sm text-gray-600 mb-1">Journey Date</p>
                             <p class="font-bold text-gray-800">
-                                {{ \Carbon\Carbon::parse($schedule->departure_date)->format('l, d F Y') }}
+                                {{ \Carbon\Carbon::parse($schedule->journey_date)->format('l, d F Y') }}
                             </p>
                         </div>
                         <div>
@@ -117,7 +117,7 @@
                     <div class="space-y-3">
                         <div class="flex justify-between">
                             <span class="text-gray-600">Fare per Seat:</span>
-                            <span class="font-semibold text-gray-800">৳{{ number_format($schedule->fare, 2) }}</span>
+                            <span class="font-semibold text-gray-800">৳{{ number_format($schedule->base_fare, 2) }}</span>
                         </div>
                         <div class="flex justify-between">
                             <span class="text-gray-600">Number of Seats:</span>

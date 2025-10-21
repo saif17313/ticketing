@@ -31,8 +31,10 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->midd
 Route::get('/', [PassengerDashboardController::class, 'index'])->name('home');
 Route::get('/passenger/dashboard', [PassengerDashboardController::class, 'index'])->name('passenger.dashboard');
 
-// Public Bus Search Routes (no authentication required)
-Route::get('/search', [SearchController::class, 'index'])->name('search');
+// Redirect search to dashboard (dashboard handles all search functionality)
+Route::get('/search', function () {
+    return redirect()->route('home');
+})->name('search');
 Route::post('/search', [SearchController::class, 'search'])->name('search.buses');
 
 // Bus Details (public)

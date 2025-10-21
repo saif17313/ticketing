@@ -40,11 +40,22 @@
             <div class="mb-6 text-center">
                 @if($booking->status === 'confirmed')
                     <span class="inline-block px-8 py-3 bg-green-100 text-green-700 rounded-full font-bold text-lg">
-                        ✅ Booking Confirmed
+                        ✅ Paid
                     </span>
+                    
+                    <!-- PROMINENT PDF DOWNLOAD BUTTON -->
+                    <div class="mt-4 mb-4">
+                        <a href="{{ route('passenger.booking.invoice', $booking) }}" 
+                           class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-black rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition shadow-md hover:shadow-lg">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            Download Ticket PDF
+                        </a>
+                    </div>
                 @elseif($booking->status === 'pending')
-                    <span class="inline-block px-8 py-3 bg-yellow-100 text-yellow-700 rounded-full font-bold text-lg">
-                        ⏳ Payment Pending
+                    <span class="inline-block px-8 py-3 bg-orange-100 text-orange-700 rounded-full font-bold text-lg">
+                        💳 Unpaid
                     </span>
                     @if($booking->payment_deadline)
                         @php
@@ -70,11 +81,15 @@
                     @endif
                 @elseif($booking->status === 'cancelled')
                     <span class="inline-block px-8 py-3 bg-red-100 text-red-700 rounded-full font-bold text-lg">
-                        ❌ Booking Cancelled
+                        ❌ Cancelled
+                    </span>
+                @elseif($booking->status === 'expired')
+                    <span class="inline-block px-8 py-3 bg-gray-100 text-gray-700 rounded-full font-bold text-lg">
+                        ⏰ Cancelled
                     </span>
                 @else
                     <span class="inline-block px-8 py-3 bg-gray-100 text-gray-700 rounded-full font-bold text-lg">
-                        ⏰ Booking Expired
+                        {{ ucfirst($booking->status) }}
                     </span>
                 @endif
             </div>
@@ -100,7 +115,7 @@
                         <div>
                             <p class="text-sm text-gray-600 mb-1">Journey Date</p>
                             <p class="font-bold text-gray-800">
-                                {{ \Carbon\Carbon::parse($booking->busSchedule->departure_date)->format('l, d F Y') }}
+                                {{ \Carbon\Carbon::parse($booking->busSchedule->journey_date)->format('l, d F Y') }}
                             </p>
                         </div>
                         <div>
@@ -207,12 +222,7 @@
                 </ul>
             </div>
 
-            <!-- Download/Print Button (Future Feature) -->
-            <div class="mt-6 text-center">
-                <button class="px-8 py-3 bg-gray-200 text-gray-500 rounded-xl font-bold cursor-not-allowed" disabled>
-                    🎫 Download Ticket (Coming Soon)
-                </button>
-            </div>
+
         </main>
     </div>
 </body>

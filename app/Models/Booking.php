@@ -116,7 +116,8 @@ class Booking extends Model
 
     public function canBeCancelled()
     {
-        return in_array($this->status, ['pending', 'confirmed']);
+        // Only allow cancellation for pending (unpaid) bookings
+        return $this->status === 'pending' && !$this->isPaymentDeadlinePassed();
     }
 
     public function needsPayment()

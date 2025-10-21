@@ -190,8 +190,16 @@ class PaymentController extends Controller
 
         $booking->load(['busSchedule.bus.company', 'busSchedule.bus.route.sourceDistrict', 'busSchedule.bus.route.destinationDistrict', 'seats', 'payment']);
 
-        // For now, return HTML view (future: convert to PDF)
-        return view('passenger.payment.invoice', compact('booking'));
+        // Generate PDF using DomPDF
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('passenger.payment.invoice', compact('booking'));
+        
+        // Set paper size and orientation
+        $pdf->setPaper('a4', 'portrait');
+        
+        // Download the PDF with a filename
+        $filename = 'Bus_Ticket_' . $booking->booking_reference . '.pdf';
+        
+        return $pdf->download($filename);
     }
 
     // Helper: Detect card type from card number
