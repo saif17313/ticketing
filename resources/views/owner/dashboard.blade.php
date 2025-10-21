@@ -214,6 +214,45 @@
             </div>
             @endif
 
+            <!-- Management Cards -->
+            <div class="mb-8">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">🎯 Manage Your Business</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Companies Card -->
+                    <a href="{{ route('owner.companies.index') }}" class="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition transform hover:-translate-y-1 border border-gray-100 group">
+                        <div class="text-5xl mb-4">🏢</div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2 group-hover:text-green-600">Companies</h3>
+                        <p class="text-gray-600 mb-4">Manage your bus companies</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-3xl font-bold text-green-600">{{ $totalCompanies }}</span>
+                            <span class="text-green-600 font-semibold group-hover:translate-x-1 transition">View →</span>
+                        </div>
+                    </a>
+                    
+                    <!-- Buses Card -->
+                    <a href="{{ route('owner.buses.index') }}" class="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition transform hover:-translate-y-1 border border-gray-100 group">
+                        <div class="text-5xl mb-4">🚌</div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2 group-hover:text-green-600">Buses</h3>
+                        <p class="text-gray-600 mb-4">Manage your fleet</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-3xl font-bold text-green-600">{{ $totalBuses }}</span>
+                            <span class="text-green-600 font-semibold group-hover:translate-x-1 transition">View →</span>
+                        </div>
+                    </a>
+                    
+                    <!-- Schedules Card -->
+                    <a href="{{ route('owner.schedules.index') }}" class="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition transform hover:-translate-y-1 border border-gray-100 group">
+                        <div class="text-5xl mb-4">📅</div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2 group-hover:text-green-600">Schedules</h3>
+                        <p class="text-gray-600 mb-4">Manage bus schedules</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-3xl font-bold text-green-600">{{ $totalSchedules }}</span>
+                            <span class="text-green-600 font-semibold group-hover:translate-x-1 transition">View →</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
             <!-- Quick Actions -->
             <div class="bg-white rounded-xl shadow p-6 mb-8 border border-gray-200">
                 <h3 class="text-lg font-bold text-gray-800 mb-4">Quick Actions</h3>

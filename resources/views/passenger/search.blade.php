@@ -26,6 +26,10 @@
                                     🏢 Dashboard
                                 </a>
                             @else
+                                <a href="{{ route('passenger.bookings.index') }}" 
+                                   class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition text-sm font-medium">
+                                    📋 My Bookings
+                                </a>
                                 <a href="{{ route('passenger.dashboard') }}" 
                                    class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition text-sm font-medium">
                                     👤 My Profile
