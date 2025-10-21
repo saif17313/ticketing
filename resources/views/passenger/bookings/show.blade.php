@@ -46,10 +46,27 @@
                     <span class="inline-block px-8 py-3 bg-yellow-100 text-yellow-700 rounded-full font-bold text-lg">
                         ⏳ Payment Pending
                     </span>
-                    @if($booking->expires_at)
-                        <p class="text-sm text-gray-600 mt-2">
-                            Expires on: {{ $booking->expires_at->format('d M Y, h:i A') }}
-                        </p>
+                    @if($booking->payment_deadline)
+                        @php
+                            $minutesRemaining = now()->diffInMinutes($booking->payment_deadline, false);
+                            $isExpired = $minutesRemaining <= 0;
+                        @endphp
+                        
+                        @if($isExpired)
+                            <div class="mt-4 bg-red-50 border-l-4 border-red-500 p-4 rounded max-w-2xl mx-auto">
+                                <p class="text-red-800 font-semibold">⏰ Payment deadline has passed!</p>
+                                <p class="text-red-700 text-sm">This booking will be auto-released shortly.</p>
+                            </div>
+                        @else
+                            <div class="mt-4 bg-orange-50 border-l-4 border-orange-500 p-4 rounded max-w-2xl mx-auto">
+                                <p class="text-orange-800 font-semibold">⏳ Complete payment within {{ $minutesRemaining }} minute(s)</p>
+                                <p class="text-orange-700 text-sm">Payment deadline: {{ $booking->payment_deadline->format('h:i A, d M Y') }}</p>
+                            </div>
+                            <a href="{{ route('passenger.booking.payment', $booking) }}" 
+                               class="inline-block mt-4 px-8 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl font-bold hover:from-orange-600 hover:to-orange-700 transition shadow-lg">
+                                💳 Pay Now
+                            </a>
+                        @endif
                     @endif
                 @elseif($booking->status === 'cancelled')
                     <span class="inline-block px-8 py-3 bg-red-100 text-red-700 rounded-full font-bold text-lg">
@@ -76,8 +93,8 @@
                         <div>
                             <p class="text-sm text-gray-600 mb-1">Route</p>
                             <p class="font-bold text-gray-800">
-                                {{ $booking->busSchedule->bus->route->districts->first()->name }} → 
-                                {{ $booking->busSchedule->bus->route->districts->last()->name }}
+                                {{ $booking->busSchedule->bus->route->sourceDistrict->name }} → 
+                                {{ $booking->busSchedule->bus->route->destinationDistrict->name }}
                             </p>
                         </div>
                         <div>

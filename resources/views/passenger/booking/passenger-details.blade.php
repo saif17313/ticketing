@@ -150,8 +150,8 @@
                             <div>
                                 <p class="text-green-100">📍 Route</p>
                                 <p class="font-bold">
-                                    {{ $schedule->bus->route->districts->first()->name }} → 
-                                    {{ $schedule->bus->route->districts->last()->name }}
+                                    {{ $schedule->bus->route->sourceDistrict->name }} → 
+                                    {{ $schedule->bus->route->destinationDistrict->name }}
                                 </p>
                             </div>
                             <div>

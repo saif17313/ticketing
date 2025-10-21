@@ -191,8 +191,8 @@
                                 <td class="px-4 py-3 text-sm text-gray-600">{{ $booking->user->name }}</td>
                                 <td class="px-4 py-3 text-sm text-gray-600">{{ $booking->busSchedule->bus->company->name }}</td>
                                 <td class="px-4 py-3 text-sm text-gray-600">
-                                    {{ $booking->busSchedule->bus->route->districts->first()->name }} → 
-                                    {{ $booking->busSchedule->bus->route->districts->last()->name }}
+                                    {{ $booking->busSchedule->bus->route->sourceDistrict->name }} → 
+                                    {{ $booking->busSchedule->bus->route->destinationDistrict->name }}
                                 </td>
                                 <td class="px-4 py-3 text-sm font-semibold text-gray-800 text-right">৳{{ number_format($booking->total_amount, 0) }}</td>
                                 <td class="px-4 py-3 text-center">
@@ -303,7 +303,7 @@
                             <div class="space-y-2 mb-3">
                                 <div class="flex items-center text-sm text-gray-600">
                                     <span class="mr-2">🗺️</span>
-                                    <span>{{ $bus->route->districts->first()->name }} → {{ $bus->route->districts->last()->name }}</span>
+                                    <span>{{ $bus->route->sourceDistrict->name }} → {{ $bus->route->destinationDistrict->name }}</span>
                                 </div>
                                 <div class="flex items-center text-sm text-gray-600">
                                     <span class="mr-2">💺</span>
@@ -368,7 +368,7 @@
                                     </td>
                                     <td class="px-4 py-3">
                                         <div class="text-sm font-semibold text-gray-800">{{ $schedule->bus->bus_number }}</div>
-                                        <div class="text-xs text-gray-500">{{ $schedule->bus->route->districts->first()->name }} → {{ $schedule->bus->route->districts->last()->name }}</div>
+                                        <div class="text-xs text-gray-500">{{ $schedule->bus->route->sourceDistrict->name }} → {{ $schedule->bus->route->destinationDistrict->name }}</div>
                                     </td>
                                     <td class="px-4 py-3 text-center">
                                         <span class="text-sm">

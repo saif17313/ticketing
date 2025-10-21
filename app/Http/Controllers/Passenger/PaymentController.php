@@ -11,18 +11,37 @@ use Illuminate\Support\Facades\DB;
 
 class PaymentController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-        $this->middleware('role:passenger');
-    }
-
     // Show payment options
     public function showPaymentOptions(Booking $booking)
     {
         // Ensure user owns this booking
         if ($booking->user_id !== Auth::id()) {
             abort(403, 'Unauthorized access to booking.');
+        }
+
+        // Check if payment deadline has passed - auto-expire if needed
+        if ($booking->isPaymentDeadlinePassed() && $booking->status === 'pending') {
+            DB::beginTransaction();
+            try {
+                // Release all seats
+                $seats = $booking->seats;
+                foreach ($seats as $seat) {
+                    $seat->release();
+                }
+
+                // Update schedule available seats
+                $booking->busSchedule->increment('available_seats', $seats->count());
+
+                // Mark booking as expired
+                $booking->update(['status' => 'expired']);
+
+                DB::commit();
+
+                return redirect()->route('passenger.bookings.index')
+                    ->with('error', '⏰ Payment deadline has passed. Booking has been automatically released.');
+            } catch (\Exception $e) {
+                DB::rollBack();
+            }
         }
 
         // Check if booking can be paid
@@ -37,7 +56,7 @@ class PaymentController extends Controller
                 ->with('error', '⏰ This booking has expired.');
         }
 
-        $booking->load(['busSchedule.bus.company', 'busSchedule.bus.route.districts', 'seats']);
+        $booking->load(['busSchedule.bus.company', 'busSchedule.bus.route.sourceDistrict', 'busSchedule.bus.route.destinationDistrict', 'seats']);
 
         return view('passenger.payment.options', compact('booking'));
     }
@@ -151,7 +170,7 @@ class PaymentController extends Controller
             abort(403);
         }
 
-        $booking->load(['busSchedule.bus.company', 'busSchedule.bus.route.districts', 'seats', 'payment']);
+        $booking->load(['busSchedule.bus.company', 'busSchedule.bus.route.sourceDistrict', 'busSchedule.bus.route.destinationDistrict', 'seats', 'payment']);
 
         return view('passenger.payment.success', compact('booking'));
     }
@@ -169,7 +188,7 @@ class PaymentController extends Controller
             return back()->with('error', '⚠️ Invoice available only for confirmed bookings.');
         }
 
-        $booking->load(['busSchedule.bus.company', 'busSchedule.bus.route.districts', 'seats', 'payment']);
+        $booking->load(['busSchedule.bus.company', 'busSchedule.bus.route.sourceDistrict', 'busSchedule.bus.route.destinationDistrict', 'seats', 'payment']);
 
         // For now, return HTML view (future: convert to PDF)
         return view('passenger.payment.invoice', compact('booking'));

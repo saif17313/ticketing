@@ -10,3 +10,6 @@ Artisan::command('inspire', function () {
 
 // Schedule booking expiry check every hour
 Schedule::command('bookings:expire')->hourly();
+
+// Release expired bookings (payment deadline passed) - run every minute
+Schedule::command('bookings:release-expired')->everyMinute();

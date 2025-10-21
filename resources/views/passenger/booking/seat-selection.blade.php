@@ -30,7 +30,7 @@
                     <div>
                         <p class="text-sm text-gray-600 mb-1">📍 Route</p>
                         <p class="font-bold text-gray-800">
-                            {{ $schedule->bus->route->districts->first()->name }} → {{ $schedule->bus->route->districts->last()->name }}
+                            {{ $schedule->bus->route->sourceDistrict->name }} → {{ $schedule->bus->route->destinationDistrict->name }}
                         </p>
                         <p class="text-sm text-gray-600">{{ \Carbon\Carbon::parse($schedule->departure_date)->format('d M Y') }}</p>
                     </div>
@@ -47,29 +47,58 @@
                 <div class="lg:col-span-2">
                     <div class="bg-white rounded-2xl shadow-md p-8 border border-gray-100">
                         <div class="flex justify-between items-center mb-6">
-                            <h2 class="text-xl font-bold text-gray-800">🪑 Select Seats (Max 4)</h2>
+                            <h2 class="text-xl font-bold text-gray-800">
+                                🪑 Select Seats (Max 4)
+                                @if($schedule->bus->bus_type === 'AC')
+                                    <span class="text-sm font-normal text-blue-600 ml-2">• AC Bus (2+1 Layout)</span>
+                                @else
+                                    <span class="text-sm font-normal text-gray-600 ml-2">• Non-AC Bus (2+2 Layout)</span>
+                                @endif
+                            </h2>
                             <div class="text-sm text-gray-600">
                                 Available: <span class="font-bold text-green-600">{{ $availableSeats->count() }}</span>
                             </div>
                         </div>
 
                         <!-- Seat Legend -->
-                        <div class="flex gap-6 mb-8 pb-6 border-b border-gray-200">
-                            <div class="flex items-center gap-2">
-                                <div class="w-10 h-10 bg-green-500 rounded-lg"></div>
-                                <span class="text-sm text-gray-600">Available</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <div class="w-10 h-10 bg-blue-500 rounded-lg"></div>
-                                <span class="text-sm text-gray-600">Selected</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <div class="w-10 h-10 bg-red-400 rounded-lg"></div>
-                                <span class="text-sm text-gray-600">Booked</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <div class="w-10 h-10 bg-yellow-400 rounded-lg"></div>
-                                <span class="text-sm text-gray-600">Locked</span>
+                        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 mb-6 border-2 border-blue-200">
+                            <h3 class="text-lg font-bold text-gray-800 mb-4">
+                                Seat Legend
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="flex items-center gap-3 bg-white p-3 rounded-lg border-2 border-gray-200">
+                                    <div class="w-12 h-12 bg-white border-2 border-gray-300 rounded-lg flex items-center justify-center shadow-sm">
+                                        <svg class="w-8 h-8 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-gray-800">Available</p>
+                                        <p class="text-xs text-gray-600">Click to select</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3 bg-white p-3 rounded-lg border-2 border-green-200">
+                                    <div class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center shadow-md ring-2 ring-green-300">
+                                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-green-700">Selected</p>
+                                        <p class="text-xs text-green-600">Your choice</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3 bg-white p-3 rounded-lg border-2 border-red-200">
+                                    <div class="w-12 h-12 bg-red-500 rounded-lg flex items-center justify-center shadow-md">
+                                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-red-700">Occupied</p>
+                                        <p class="text-xs text-red-600">Not available</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -77,42 +106,118 @@
                         <form method="POST" action="{{ route('passenger.booking.seats.store', $schedule) }}" id="seatForm">
                             @csrf
 
-                            <!-- Driver Section -->
-                            <div class="mb-8">
-                                <div class="inline-block bg-gray-200 px-6 py-3 rounded-lg mb-4">
-                                    <span class="font-semibold text-gray-700">🚗 Driver</span>
+                            <!-- Bus Layout Container -->
+                            <div class="bg-gray-100 rounded-2xl p-8 border-4 border-gray-300">
+                                <!-- Driver Section -->
+                                <div class="flex justify-end mb-6">
+                                    <div class="bg-gray-700 rounded-full p-4 w-16 h-16 flex items-center justify-center">
+                                        <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <!-- Seat Grid -->
-                            <div class="grid grid-cols-4 gap-4">
                                 @php
                                     $allSeats = $availableSeats->merge($bookedSeats)->merge($lockedSeats)->sortBy('seat_number');
+                                    $seatsArray = $allSeats->values()->all(); // Use ->all() instead of ->toArray() to keep objects
+                                    $totalSeats = count($seatsArray);
+                                    $busType = $schedule->bus->bus_type;
+                                    
+                                    // Different layouts: 2x2 for Non-AC, 2x1 for AC
+                                    if ($busType === 'Non-AC') {
+                                        $seatsPerRow = 4; // 2 left + 2 right (aisle in between)
+                                        $leftSeatsCount = 2;
+                                        $rightSeatsCount = 2;
+                                        $gridCols = 13; // 4 left + 3 aisle + 4 right + 2 spacing
+                                    } else { // AC
+                                        $seatsPerRow = 3; // 2 left + 1 right (aisle in between)
+                                        $leftSeatsCount = 2;
+                                        $rightSeatsCount = 1;
+                                        $gridCols = 11; // 4 left + 3 aisle + 4 right
+                                    }
                                 @endphp
 
-                                @foreach($allSeats as $seat)
-                                    <div class="seat-wrapper">
-                                        @if($seat->isAvailable())
-                                            <input type="checkbox" 
-                                                   name="seats[]" 
-                                                   value="{{ $seat->id }}" 
-                                                   id="seat_{{ $seat->id }}"
-                                                   class="seat-checkbox hidden">
-                                            <label for="seat_{{ $seat->id }}" 
-                                                   class="seat-label block w-full h-16 bg-green-500 hover:bg-green-600 rounded-lg cursor-pointer transition flex items-center justify-center text-white font-bold text-sm shadow-md hover:shadow-lg transform hover:scale-105">
-                                                {{ $seat->seat_number }}
-                                            </label>
-                                        @elseif($seat->isBooked())
-                                            <div class="seat-booked block w-full h-16 bg-red-400 rounded-lg cursor-not-allowed flex items-center justify-center text-white font-bold text-sm opacity-60">
-                                                {{ $seat->seat_number }}
-                                            </div>
-                                        @else
-                                            <div class="seat-locked block w-full h-16 bg-yellow-400 rounded-lg cursor-not-allowed flex items-center justify-center text-white font-bold text-sm opacity-60">
-                                                {{ $seat->seat_number }}
-                                            </div>
-                                        @endif
-                                    </div>
-                                @endforeach
+                                <!-- Seat Grid with Aisle -->
+                                <div class="space-y-4">
+                                    @for($i = 0; $i < $totalSeats; $i += $seatsPerRow)
+                                        <div class="grid gap-2" style="grid-template-columns: repeat({{ $gridCols }}, minmax(0, 1fr));">
+                                            <!-- Left side seats (2 seats) -->
+                                            @for($j = 0; $j < $leftSeatsCount && ($i + $j) < $totalSeats; $j++)
+                                                @php $seat = $seatsArray[$i + $j]; @endphp
+                                                <div class="col-span-2">
+                                                    @if($seat->isAvailable())
+                                                        <input type="checkbox" 
+                                                               name="seats[]" 
+                                                               value="{{ $seat->id }}" 
+                                                               id="seat_{{ $seat->id }}"
+                                                               class="seat-checkbox hidden"
+                                                               data-seat="{{ $seat->seat_number }}">
+                                                        <label for="seat_{{ $seat->id }}" 
+                                                               class="seat-label block w-full h-14 bg-white border-2 border-gray-300 hover:border-blue-400 hover:bg-blue-50 rounded-lg cursor-pointer transition flex flex-col items-center justify-center text-gray-700 font-bold shadow-sm hover:shadow-md">
+                                                            <svg class="w-6 h-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                                                <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+                                                            </svg>
+                                                            <span class="text-xs mt-1">{{ $seat->seat_number }}</span>
+                                                        </label>
+                                                    @elseif($seat->isBooked())
+                                                        <div class="block w-full h-14 bg-red-500 border-2 border-red-600 rounded-lg cursor-not-allowed flex flex-col items-center justify-center text-white font-bold shadow-md">
+                                                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                                <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+                                                            </svg>
+                                                            <span class="text-xs mt-1">{{ $seat->seat_number }}</span>
+                                                        </div>
+                                                    @else
+                                                        <div class="block w-full h-14 bg-yellow-500 rounded-lg cursor-not-allowed flex flex-col items-center justify-center text-white font-bold opacity-70">
+                                                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                                <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+                                                            </svg>
+                                                            <span class="text-xs mt-1">{{ $seat->seat_number }}</span>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            @endfor
+
+                                            <!-- Empty columns for visual spacing (aisle) -->
+                                            <div class="col-span-3"></div>
+
+                                            <!-- Right side seats (2 for Non-AC, 1 for AC) -->
+                                            @for($j = $leftSeatsCount; $j < $seatsPerRow && ($i + $j) < $totalSeats; $j++)
+                                                @php $seat = $seatsArray[$i + $j]; @endphp
+                                                <div class="{{ $busType === 'Non-AC' ? 'col-span-2' : 'col-span-4' }}">
+                                                    @if($seat->isAvailable())
+                                                        <input type="checkbox" 
+                                                               name="seats[]" 
+                                                               value="{{ $seat->id }}" 
+                                                               id="seat_{{ $seat->id }}"
+                                                               class="seat-checkbox hidden"
+                                                               data-seat="{{ $seat->seat_number }}">
+                                                        <label for="seat_{{ $seat->id }}" 
+                                                               class="seat-label block w-full h-14 bg-white border-2 border-gray-300 hover:border-blue-400 hover:bg-blue-50 rounded-lg cursor-pointer transition flex flex-col items-center justify-center text-gray-700 font-bold shadow-sm hover:shadow-md">
+                                                            <svg class="w-6 h-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                                                <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+                                                            </svg>
+                                                            <span class="text-xs mt-1">{{ $seat->seat_number }}</span>
+                                                        </label>
+                                                    @elseif($seat->isBooked())
+                                                        <div class="block w-full h-14 bg-red-500 border-2 border-red-600 rounded-lg cursor-not-allowed flex flex-col items-center justify-center text-white font-bold shadow-md">
+                                                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                                <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+                                                            </svg>
+                                                            <span class="text-xs mt-1">{{ $seat->seat_number }}</span>
+                                                        </div>
+                                                    @else
+                                                        <div class="block w-full h-14 bg-yellow-500 rounded-lg cursor-not-allowed flex flex-col items-center justify-center text-white font-bold opacity-70">
+                                                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                                <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+                                                            </svg>
+                                                            <span class="text-xs mt-1">{{ $seat->seat_number }}</span>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            @endfor
+                                        </div>
+                                    @endfor
+                                </div>
                             </div>
 
                             @error('seats')
@@ -181,69 +286,111 @@
     </div>
 
     <script>
-        const farePerSeat = {{ $schedule->fare }};
-        const checkboxes = document.querySelectorAll('.seat-checkbox');
-        const submitBtn = document.getElementById('submitBtn');
-        const selectedInfo = document.getElementById('selectedInfo');
-        const selectedSeatsSpan = document.getElementById('selectedSeats');
-        const totalAmountSpan = document.getElementById('totalAmount');
-        const seatCountSpan = document.getElementById('seatCount');
-        const sidebarTotalSpan = document.getElementById('sidebarTotal');
+        document.addEventListener('DOMContentLoaded', function() {
+            const farePerSeat = parseFloat('{{ $schedule->fare }}');
+            const checkboxes = document.querySelectorAll('.seat-checkbox');
+            const submitBtn = document.getElementById('submitBtn');
+            const selectedInfo = document.getElementById('selectedInfo');
+            const selectedSeatsSpan = document.getElementById('selectedSeats');
+            const totalAmountSpan = document.getElementById('totalAmount');
+            const seatCountSpan = document.getElementById('seatCount');
+            const sidebarTotalSpan = document.getElementById('sidebarTotal');
 
-        checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', updateSelection);
-        });
+            console.log('DOM Loaded. Found checkboxes:', checkboxes.length);
 
-        function updateSelection() {
-            const selected = Array.from(checkboxes).filter(cb => cb.checked);
-            const count = selected.length;
-            const total = count * farePerSeat;
-
-            // Update selected seat labels
-            document.querySelectorAll('.seat-label').forEach(label => {
-                const checkbox = label.previousElementSibling;
-                if (checkbox.checked) {
-                    label.classList.remove('bg-green-500', 'hover:bg-green-600');
-                    label.classList.add('bg-blue-500', 'hover:bg-blue-600');
+            // Add event listeners to all checkboxes
+            checkboxes.forEach(checkbox => {
+                console.log('Setting up checkbox:', checkbox.id);
+                
+                checkbox.addEventListener('change', function(e) {
+                    console.log('Checkbox changed:', this.id, this.checked);
+                    updateSelection();
+                });
+                
+                // Find and setup label
+                const label = document.querySelector(`label[for="${checkbox.id}"]`);
+                if (label) {
+                    console.log('Found label for:', checkbox.id);
+                    // Add direct click handler to ensure it works
+                    label.addEventListener('click', function(e) {
+                        console.log('Label clicked for:', checkbox.id);
+                        // The default behavior should toggle the checkbox
+                        // We just need to update after a tiny delay
+                        setTimeout(() => {
+                            console.log('After click, checked:', checkbox.checked);
+                            updateSelection();
+                        }, 50);
+                    });
                 } else {
-                    label.classList.remove('bg-blue-500', 'hover:bg-blue-600');
-                    label.classList.add('bg-green-500', 'hover:bg-green-600');
+                    console.error('No label found for:', checkbox.id);
                 }
             });
 
-            // Limit to 4 seats
-            if (count > 4) {
-                alert('⚠️ You can select maximum 4 seats at a time.');
-                checkboxes.forEach(cb => {
-                    if (!selected.slice(0, 4).includes(cb)) {
-                        cb.checked = false;
+            function updateSelection() {
+                console.log('updateSelection called');
+                const selected = Array.from(checkboxes).filter(cb => cb.checked);
+                const count = selected.length;
+                console.log('Selected count:', count);
+                
+                // Limit to 4 seats
+                if (count > 4) {
+                    alert('⚠️ You can select maximum 4 seats at a time.');
+                    const lastChecked = selected[selected.length - 1];
+                    lastChecked.checked = false;
+                    updateSelection();
+                    return;
+                }
+
+                const total = count * farePerSeat;
+
+            // Update all seat label colors
+            checkboxes.forEach(checkbox => {
+                const label = document.querySelector(`label[for="${checkbox.id}"]`);
+                if (label) {
+                    if (checkbox.checked) {
+                        // Selected state - green
+                        label.classList.remove('bg-white', 'border-gray-300', 'hover:border-blue-400', 'hover:bg-blue-50', 'text-gray-700');
+                        label.classList.add('bg-green-500', 'border-green-500', 'hover:bg-green-600', 'ring-4', 'ring-green-300', 'text-white');
+                        // Update icon color
+                        const svg = label.querySelector('svg');
+                        if (svg) {
+                            svg.classList.remove('text-gray-600');
+                            svg.classList.add('text-white');
+                        }
+                    } else {
+                        // Available state - white with border
+                        label.classList.remove('bg-green-500', 'border-green-500', 'hover:bg-green-600', 'ring-4', 'ring-green-300', 'text-white');
+                        label.classList.add('bg-white', 'border-gray-300', 'hover:border-blue-400', 'hover:bg-blue-50', 'text-gray-700');
+                        // Update icon color
+                        const svg = label.querySelector('svg');
+                        if (svg) {
+                            svg.classList.remove('text-white');
+                            svg.classList.add('text-gray-600');
+                        }
                     }
-                });
-                updateSelection();
-                return;
+                }
+            });                // Update display
+                if (count > 0) {
+                    selectedInfo.classList.remove('hidden');
+                    submitBtn.disabled = false;
+
+                    const seatNumbers = selected.map(cb => cb.getAttribute('data-seat'));
+
+                    selectedSeatsSpan.textContent = seatNumbers.join(', ');
+                    totalAmountSpan.textContent = '৳' + total.toFixed(2);
+                    seatCountSpan.textContent = count;
+                    sidebarTotalSpan.textContent = '৳' + total.toFixed(2);
+                } else {
+                    selectedInfo.classList.add('hidden');
+                    submitBtn.disabled = true;
+                    seatCountSpan.textContent = '0';
+                    sidebarTotalSpan.textContent = '৳0.00';
+                }
             }
 
-            // Update display
-            if (count > 0) {
-                selectedInfo.classList.remove('hidden');
-                submitBtn.disabled = false;
-
-                const seatNumbers = selected.map(cb => {
-                    const label = cb.nextElementSibling;
-                    return label.textContent.trim();
-                });
-
-                selectedSeatsSpan.textContent = seatNumbers.join(', ');
-                totalAmountSpan.textContent = '৳' + total.toFixed(2);
-                seatCountSpan.textContent = count;
-                sidebarTotalSpan.textContent = '৳' + total.toFixed(2);
-            } else {
-                selectedInfo.classList.add('hidden');
-                submitBtn.disabled = true;
-                seatCountSpan.textContent = '0';
-                sidebarTotalSpan.textContent = '৳0.00';
-            }
-        }
+            // Initialize on page load
+            updateSelection();
+        });
     </script>
 </body>
 </html>

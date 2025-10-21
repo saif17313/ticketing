@@ -95,8 +95,8 @@
                                     <div>
                                         <p class="text-sm text-gray-600 mb-1">📍 Route</p>
                                         <p class="font-bold text-gray-800">
-                                            {{ $booking->busSchedule->bus->route->districts->first()->name }} → 
-                                            {{ $booking->busSchedule->bus->route->districts->last()->name }}
+                                            {{ $booking->busSchedule->bus->route->sourceDistrict->name }} → 
+                                            {{ $booking->busSchedule->bus->route->destinationDistrict->name }}
                                         </p>
                                     </div>
                                     <div>
@@ -119,27 +119,62 @@
                                     </div>
                                 </div>
 
-                                <div class="flex justify-between items-center pt-4 border-t border-gray-200">
-                                    <div>
-                                        <p class="text-sm text-gray-600">Total Amount</p>
-                                        <p class="text-2xl font-bold text-green-600">৳{{ number_format($booking->total_amount, 2) }}</p>
-                                    </div>
-                                    <div class="flex gap-3">
-                                        <a href="{{ route('passenger.bookings.show', $booking) }}" 
-                                           class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-semibold">
-                                            View Details
-                                        </a>
-                                        @if($booking->canBeCancelled())
-                                            <form method="POST" 
-                                                  action="{{ route('passenger.bookings.cancel', $booking) }}" 
-                                                  onsubmit="return confirm('Are you sure you want to cancel this booking?');">
-                                                @csrf
-                                                <button type="submit" 
-                                                        class="px-6 py-2 border-2 border-red-500 text-red-500 rounded-lg hover:bg-red-50 transition font-semibold">
-                                                    Cancel Booking
-                                                </button>
-                                            </form>
+                                <div class="pt-4 border-t border-gray-200">
+                                    <!-- Payment Deadline Warning for Pending Bookings -->
+                                    @if($booking->status === 'pending' && $booking->payment_deadline)
+                                        @php
+                                            $minutesRemaining = now()->diffInMinutes($booking->payment_deadline, false);
+                                            $isExpiringSoon = $minutesRemaining > 0 && $minutesRemaining <= 30;
+                                            $isExpired = $minutesRemaining <= 0;
+                                        @endphp
+                                        
+                                        @if($isExpired)
+                                            <div class="bg-red-50 border-l-4 border-red-500 p-3 mb-4 rounded">
+                                                <p class="text-red-800 font-semibold">⏰ Payment deadline has passed. This booking will be auto-released.</p>
+                                            </div>
+                                        @elseif($isExpiringSoon)
+                                            <div class="bg-yellow-50 border-l-4 border-yellow-500 p-3 mb-4 rounded">
+                                                <p class="text-yellow-800 font-semibold">⏳ Payment deadline: {{ $minutesRemaining }} minute(s) remaining!</p>
+                                                <p class="text-yellow-700 text-sm">Complete payment by {{ $booking->payment_deadline->format('h:i A') }}</p>
+                                            </div>
                                         @endif
+                                    @endif
+
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <p class="text-sm text-gray-600">Total Amount</p>
+                                            <p class="text-2xl font-bold text-green-600">৳{{ number_format($booking->total_amount, 2) }}</p>
+                                            @if($booking->status === 'pending' && $booking->payment_deadline && !$booking->isPaymentDeadlinePassed())
+                                                <p class="text-xs text-gray-500 mt-1">
+                                                    Pay by: {{ $booking->payment_deadline->format('d M Y, h:i A') }}
+                                                </p>
+                                            @endif
+                                        </div>
+                                        <div class="flex gap-3">
+                                            <!-- Pay Now Button for Pending Bookings -->
+                                            @if($booking->needsPayment())
+                                                <a href="{{ route('passenger.booking.payment', $booking) }}" 
+                                                   class="px-6 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg hover:from-orange-600 hover:to-orange-700 transition font-semibold shadow-md">
+                                                    💳 Pay Now
+                                                </a>
+                                            @endif
+                                            
+                                            <a href="{{ route('passenger.bookings.show', $booking) }}" 
+                                               class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-semibold">
+                                                View Details
+                                            </a>
+                                            @if($booking->canBeCancelled())
+                                                <form method="POST" 
+                                                      action="{{ route('passenger.bookings.cancel', $booking) }}" 
+                                                      onsubmit="return confirm('Are you sure you want to cancel this booking?');">
+                                                    @csrf
+                                                    <button type="submit" 
+                                                            class="px-6 py-2 border-2 border-red-500 text-red-500 rounded-lg hover:bg-red-50 transition font-semibold">
+                                                        Cancel Booking
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                             </div>

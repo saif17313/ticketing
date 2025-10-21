@@ -44,8 +44,8 @@
                         <div>
                             <p class="text-sm text-gray-600 mb-1">Route</p>
                             <p class="font-bold text-gray-800">
-                                {{ $schedule->bus->route->districts->first()->name }} → 
-                                {{ $schedule->bus->route->districts->last()->name }}
+                                {{ $schedule->bus->route->sourceDistrict->name }} → 
+                                {{ $schedule->bus->route->destinationDistrict->name }}
                             </p>
                         </div>
                         <div>

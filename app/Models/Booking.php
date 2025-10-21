@@ -19,11 +19,13 @@ class Booking extends Model
         'booking_type',
         'status',
         'expires_at',
+        'payment_deadline',
         'passenger_details',
     ];
 
     protected $casts = [
         'expires_at' => 'datetime',
+        'payment_deadline' => 'datetime',
         'passenger_details' => 'array',
         'total_amount' => 'decimal:2',
     ];
@@ -98,8 +100,27 @@ class Booking extends Model
         return $this->status === 'expired' || ($this->expires_at && $this->expires_at->isPast());
     }
 
+    public function isPaymentDeadlinePassed()
+    {
+        return $this->payment_deadline && $this->payment_deadline->isPast();
+    }
+
+    public function getTimeRemainingForPayment()
+    {
+        if (!$this->payment_deadline || $this->isPaymentDeadlinePassed()) {
+            return null;
+        }
+
+        return now()->diffInMinutes($this->payment_deadline);
+    }
+
     public function canBeCancelled()
     {
         return in_array($this->status, ['pending', 'confirmed']);
+    }
+
+    public function needsPayment()
+    {
+        return $this->status === 'pending' && !$this->isPaymentDeadlinePassed();
     }
 }

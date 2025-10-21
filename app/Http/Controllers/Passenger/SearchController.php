@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Passenger;
 
 use App\Http\Controllers\Controller;
+use App\Models\Bus;
 use App\Models\District;
 use App\Models\Route;
 use App\Models\BusSchedule;
+use App\Models\BusCompany;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -16,7 +18,10 @@ class SearchController extends Controller
         // Get all districts for search form
         $districts = District::orderBy('name')->get();
         
-        return view('passenger.search', compact('districts'));
+        // Initialize empty companies collection for initial page load
+        $companies = collect();
+        
+        return view('passenger.search', compact('districts', 'companies'));
     }
     
     public function search(Request $request)
@@ -43,13 +48,14 @@ class SearchController extends Controller
         
         // Get search parameters for filters and sorting
         $busType = $request->input('bus_type');
+        $companyId = $request->input('company_id');
         $sortBy = $request->input('sort_by', 'departure_time'); // default sort
         
         // Build query for schedules
         $schedulesQuery = BusSchedule::where('journey_date', $validated['journey_date'])
             ->where('status', 'scheduled')
             ->where('available_seats', '>', 0)
-            ->whereHas('bus', function($query) use ($route, $busType) {
+            ->whereHas('bus', function($query) use ($route, $busType, $companyId) {
                 $query->where('route_id', $route->id)
                       ->where('is_active', true);
                 
@@ -57,12 +63,31 @@ class SearchController extends Controller
                 if ($busType) {
                     $query->where('bus_type', $busType);
                 }
+                
+                // Filter by company if selected
+                if ($companyId) {
+                    $query->where('company_id', $companyId);
+                }
             })
             ->with([
                 'bus.company',
                 'bus.route.sourceDistrict',
                 'bus.route.destinationDistrict'
             ]);
+        
+        // Filter out buses that have already departed
+        $journeyDate = Carbon::parse($validated['journey_date']);
+        $now = now();
+        
+        if ($journeyDate->isToday()) {
+            // For today, only show buses that haven't departed yet
+            $currentTime = $now->format('H:i:s');
+            $schedulesQuery->where('departure_time', '>', $currentTime);
+        } elseif ($journeyDate->isPast()) {
+            // If date is in the past, return empty results
+            $schedulesQuery->whereRaw('1 = 0'); // Force empty result
+        }
+        // For future dates, show all buses
         
         // Apply sorting
         switch ($sortBy) {
@@ -80,8 +105,23 @@ class SearchController extends Controller
         
         $schedules = $schedulesQuery->get();
         
+        // Check if we have no results and the date is in the past or today with no future buses
+        if ($schedules->isEmpty()) {
+            $journeyDate = Carbon::parse($validated['journey_date']);
+            if ($journeyDate->isPast()) {
+                return back()->with('error', '⚠️ The selected date (' . $journeyDate->format('d M Y') . ') is in the past. Please select today or a future date.');
+            } elseif ($journeyDate->isToday()) {
+                return back()->with('error', '⚠️ No buses available today. All buses have already departed. Please try tomorrow.');
+            }
+        }
+        
         // Get all districts for search form
         $districts = District::orderBy('name')->get();
+        
+        // Get bus companies that operate on this route
+        $companies = BusCompany::whereHas('buses', function($query) use ($route) {
+            $query->where('route_id', $route->id)->where('is_active', true);
+        })->orderBy('name')->get();
         
         // Get selected districts for display
         $fromDistrict = District::find($validated['from_district_id']);
@@ -90,6 +130,7 @@ class SearchController extends Controller
         return view('passenger.search', compact(
             'schedules',
             'districts',
+            'companies',
             'route',
             'fromDistrict',
             'toDistrict',

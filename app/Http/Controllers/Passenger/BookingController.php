@@ -9,24 +9,50 @@ use App\Models\Seat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class BookingController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     // Step 1: Show seat selection
     public function showSeatSelection(BusSchedule $schedule)
     {
-        $schedule->load(['bus.company', 'bus.route.districts']);
-
-        // Check if schedule is in the past
-        $scheduleDateTime = \Carbon\Carbon::parse($schedule->departure_date . ' ' . $schedule->departure_time);
-        if ($scheduleDateTime->isPast()) {
+        // Check if user has booked 4 or more tickets in the last 24 hours
+        $recentBookingsCount = Booking::where('user_id', Auth::id())
+            ->where('created_at', '>=', now()->subHours(24))
+            ->sum('total_seats'); // Count total seats booked, not just bookings
+        
+        if ($recentBookingsCount >= 4) {
             return redirect()->route('passenger.dashboard')
+                ->with('error', '⚠️ You have already booked ' . $recentBookingsCount . ' seat(s) in the last 24 hours. Maximum 4 seats allowed per day. Please try again later.');
+        }
+
+        $schedule->load(['bus.company', 'bus.route.sourceDistrict', 'bus.route.destinationDistrict']);
+
+        // Validate schedule has required date/time fields
+        if (!$schedule->journey_date || !$schedule->departure_time) {
+            return redirect()->route('search')
+                ->with('error', '⚠️ This schedule has incomplete date/time information. Please contact support or try another bus.');
+        }
+
+        // Check if schedule has already departed - First check date, then time
+        $now = \Carbon\Carbon::now();
+        $journeyDate = \Carbon\Carbon::parse($schedule->journey_date);
+        
+        // If journey date is in the past, it's definitely departed
+        if ($journeyDate->isBefore($now->startOfDay())) {
+            return redirect()->back()
                 ->with('error', '⚠️ This schedule has already departed. Please select another schedule.');
+        }
+        
+        // If journey date is today, check the departure time
+        if ($journeyDate->isToday()) {
+            $departureTime = \Carbon\Carbon::parse($schedule->departure_time);
+            $currentTime = \Carbon\Carbon::parse($now->format('H:i:s'));
+            
+            if ($departureTime->lessThanOrEqualTo($currentTime)) {
+                return redirect()->back()
+                    ->with('error', '⚠️ This schedule has already departed. Please select another schedule.');
+            }
         }
 
         // Generate or get seats for this schedule
@@ -57,6 +83,18 @@ class BookingController extends Controller
     // Step 2: Store seat selection and lock seats
     public function storeSeatSelection(Request $request, BusSchedule $schedule)
     {
+        // Check if user has booked 4 or more tickets in the last 24 hours
+        $recentBookingsCount = Booking::where('user_id', Auth::id())
+            ->where('created_at', '>=', now()->subHours(24))
+            ->sum('total_seats');
+        
+        $attemptingToBook = count($request->seats ?? []);
+        $totalWouldBe = $recentBookingsCount + $attemptingToBook;
+        
+        if ($totalWouldBe > 4) {
+            return back()->with('error', '⚠️ You have already booked ' . $recentBookingsCount . ' seat(s) in the last 24 hours. You can only book ' . (4 - $recentBookingsCount) . ' more seat(s). Maximum 4 seats allowed per day.');
+        }
+
         $request->validate([
             'seats' => 'required|array|min:1|max:4',
             'seats.*' => 'required|exists:seats,id',
@@ -119,7 +157,7 @@ class BookingController extends Controller
                 ->with('error', '⏱️ Your seat selection has expired. Please select seats again.');
         }
 
-        $schedule->load(['bus.company', 'bus.route.districts']);
+        $schedule->load(['bus.company', 'bus.route.sourceDistrict', 'bus.route.destinationDistrict']);
 
         // Get selected seats
         $seats = Seat::whereIn('id', session('booking_seats'))->get();
@@ -162,7 +200,7 @@ class BookingController extends Controller
                 ->with('error', '⚠️ Session expired. Please start booking again.');
         }
 
-        $schedule->load(['bus.company', 'bus.route.districts']);
+        $schedule->load(['bus.company', 'bus.route.sourceDistrict', 'bus.route.destinationDistrict']);
 
         $seats = Seat::whereIn('id', session('booking_seats'))->get();
         $totalAmount = $seats->sum(function ($seat) use ($schedule) {
@@ -217,7 +255,8 @@ class BookingController extends Controller
                 'total_seats' => $seats->count(),
                 'total_amount' => $totalAmount,
                 'booking_type' => $bookingType,
-                'status' => $bookingType === 'direct_pay' ? 'confirmed' : 'pending',
+                'status' => 'pending', // Always pending initially, payment confirms it
+                'payment_deadline' => now()->addMinutes(30), // 30 minutes to pay
                 'expires_at' => $bookingType === 'book' ? now()->addHours(24) : null,
                 'passenger_details' => session('passenger_details'),
             ]);
@@ -238,11 +277,11 @@ class BookingController extends Controller
             // Redirect based on booking type
             if ($bookingType === 'direct_pay') {
                 return redirect()->route('passenger.booking.payment', $booking)
-                    ->with('success', '✅ Booking created! Please complete payment to confirm.');
+                    ->with('success', '✅ Booking created! Please complete payment within 30 minutes.');
             }
 
             return redirect()->route('passenger.bookings.show', $booking)
-                ->with('success', '🎉 Booking successful! Your booking reference: ' . $booking->booking_reference);
+                ->with('success', '🎉 Booking created! Please complete payment within 30 minutes. Reference: ' . $booking->booking_reference);
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', '⚠️ Booking failed. Please try again. Error: ' . $e->getMessage());
@@ -253,7 +292,7 @@ class BookingController extends Controller
     public function myBookings()
     {
         $bookings = Booking::where('user_id', Auth::id())
-            ->with(['busSchedule.bus.company', 'busSchedule.bus.route.districts', 'seats'])
+            ->with(['busSchedule.bus.company', 'busSchedule.bus.route.sourceDistrict', 'busSchedule.bus.route.destinationDistrict', 'seats'])
             ->latest()
             ->paginate(10);
 
@@ -268,7 +307,7 @@ class BookingController extends Controller
             abort(403, 'Unauthorized access to booking.');
         }
 
-        $booking->load(['busSchedule.bus.company', 'busSchedule.bus.route.districts', 'seats', 'payment']);
+        $booking->load(['busSchedule.bus.company', 'busSchedule.bus.route.sourceDistrict', 'busSchedule.bus.route.destinationDistrict', 'seats', 'payment']);
 
         return view('passenger.bookings.show', compact('booking'));
     }
@@ -319,12 +358,15 @@ class BookingController extends Controller
 
         $bus = $schedule->bus;
         $totalSeats = $bus->total_seats;
+        $busType = $bus->bus_type;
 
-        // Generate seat numbers based on bus layout
+        // Determine layout based on bus type
+        // Non-AC = 2x2 (4 seats per row: A, B, C, D)
+        // AC = 2x1 (3 seats per row: A, B, C)
         $seats = [];
         
-        if ($bus->seat_layout === '2x2') {
-            // 2x2 layout (A-D per row)
+        if ($busType === 'Non-AC') {
+            // 2x2 layout for Non-AC buses (A-D per row)
             $rows = ceil($totalSeats / 4);
             $seatNumber = 1;
             
@@ -343,16 +385,23 @@ class BookingController extends Controller
                 }
             }
         } else {
-            // 2x1 layout (A-C per row) or simple numbering
-            for ($i = 1; $i <= $totalSeats; $i++) {
-                $seats[] = [
-                    'bus_schedule_id' => $schedule->id,
-                    'seat_number' => 'S' . $i,
-                    'seat_type' => 'standard',
-                    'status' => 'available',
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
+            // 2x1 layout for AC buses (A-C per row)
+            $rows = ceil($totalSeats / 3);
+            $seatNumber = 1;
+            
+            for ($row = 1; $row <= $rows; $row++) {
+                foreach (['A', 'B', 'C'] as $column) {
+                    if ($seatNumber > $totalSeats) break;
+                    $seats[] = [
+                        'bus_schedule_id' => $schedule->id,
+                        'seat_number' => $column . $row,
+                        'seat_type' => 'standard',
+                        'status' => 'available',
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                    $seatNumber++;
+                }
             }
         }
 

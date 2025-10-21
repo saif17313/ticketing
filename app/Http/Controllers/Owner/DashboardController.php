@@ -78,7 +78,7 @@ class DashboardController extends Controller
         }
 
         // Recent bookings
-        $recentBookings = Booking::with(['user', 'busSchedule.bus.company', 'busSchedule.bus.route.districts'])
+        $recentBookings = Booking::with(['user', 'busSchedule.bus.company', 'busSchedule.bus.route.sourceDistrict', 'busSchedule.bus.route.destinationDistrict'])
             ->whereHas('busSchedule.bus.company', function($query) use ($owner) {
                 $query->where('owner_id', $owner->id);
             })
@@ -95,13 +95,13 @@ class DashboardController extends Controller
         // My Buses - Latest 5 buses
         $myBuses = Bus::whereHas('company', function($q) use ($owner) {
             $q->where('owner_id', $owner->id);
-        })->with(['company', 'route.districts'])->latest()->take(5)->get();
+        })->with(['company', 'route.sourceDistrict', 'route.destinationDistrict'])->latest()->take(5)->get();
 
         // Upcoming Schedules - Next 6 schedules
         $upcomingSchedules = BusSchedule::whereHas('bus.company', function($q) use ($owner) {
             $q->where('owner_id', $owner->id);
         })
-        ->with(['bus.company', 'bus.route.districts'])
+        ->with(['bus.company', 'bus.route.sourceDistrict', 'bus.route.destinationDistrict'])
         ->where('journey_date', '>=', now()->toDateString())
         ->orderBy('journey_date')
         ->orderBy('departure_time')
