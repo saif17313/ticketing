@@ -12,7 +12,6 @@ use App\Http\Controllers\Passenger\SearchController;
 use App\Http\Controllers\Passenger\BusController as PassengerBusController;
 use App\Http\Controllers\Passenger\BookingController;
 use App\Http\Controllers\Passenger\PaymentController;
-use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 
 // Guest routes (not logged in)
 Route::middleware('guest')->group(function () {
@@ -80,10 +79,4 @@ Route::middleware(['auth', 'role:passenger'])->prefix('passenger')->name('passen
     Route::post('/payment/card/{booking}', [PaymentController::class, 'processCardPayment'])->name('payment.card');
     Route::get('/payment/success/{booking}', [PaymentController::class, 'showSuccess'])->name('payment.success');
     Route::get('/booking/{booking}/invoice', [PaymentController::class, 'downloadInvoice'])->name('booking.invoice');
-});
-
-// Admin routes (only accessible by users with role='admin')
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
-    // Dashboard
-    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 });

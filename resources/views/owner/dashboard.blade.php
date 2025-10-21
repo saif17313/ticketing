@@ -47,55 +47,172 @@
             </div>
 
             <!-- Statistics Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
                 <!-- Total Companies -->
                 <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-6 border border-gray-100">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-gray-500 text-sm font-medium mb-1">Total Companies</p>
-                            <p class="text-4xl font-bold text-green-600">{{ $totalCompanies }}</p>
-                            <p class="text-gray-400 text-xs mt-2">Active businesses</p>
+                    <div class="text-center">
+                        <div class="bg-green-100 rounded-full p-3 w-16 h-16 mx-auto mb-3 flex items-center justify-center">
+                            <span class="text-3xl">🏢</span>
                         </div>
-                        <div class="bg-green-100 rounded-full p-4">
-                            <svg class="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                            </svg>
-                        </div>
+                        <p class="text-gray-500 text-sm font-medium mb-1">Companies</p>
+                        <p class="text-3xl font-bold text-green-600">{{ $totalCompanies }}</p>
                     </div>
                 </div>
 
                 <!-- Total Buses -->
                 <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-6 border border-gray-100">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-gray-500 text-sm font-medium mb-1">Total Buses</p>
-                            <p class="text-4xl font-bold text-blue-600">{{ $totalBuses }}</p>
-                            <p class="text-gray-400 text-xs mt-2">Fleet size</p>
+                    <div class="text-center">
+                        <div class="bg-blue-100 rounded-full p-3 w-16 h-16 mx-auto mb-3 flex items-center justify-center">
+                            <span class="text-3xl">🚌</span>
                         </div>
-                        <div class="bg-blue-100 rounded-full p-4">
-                            <svg class="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
-                            </svg>
-                        </div>
+                        <p class="text-gray-500 text-sm font-medium mb-1">Buses</p>
+                        <p class="text-3xl font-bold text-blue-600">{{ $totalBuses }}</p>
                     </div>
                 </div>
 
                 <!-- Active Schedules -->
                 <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-6 border border-gray-100">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-gray-500 text-sm font-medium mb-1">Active Schedules</p>
-                            <p class="text-4xl font-bold text-orange-600">{{ $totalSchedules }}</p>
-                            <p class="text-gray-400 text-xs mt-2">Upcoming trips</p>
+                    <div class="text-center">
+                        <div class="bg-orange-100 rounded-full p-3 w-16 h-16 mx-auto mb-3 flex items-center justify-center">
+                            <span class="text-3xl">📅</span>
                         </div>
-                        <div class="bg-orange-100 rounded-full p-4">
-                            <svg class="h-8 w-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                            </svg>
+                        <p class="text-gray-500 text-sm font-medium mb-1">Schedules</p>
+                        <p class="text-3xl font-bold text-orange-600">{{ $totalSchedules }}</p>
+                    </div>
+                </div>
+
+                <!-- Total Bookings -->
+                <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-6 border border-gray-100">
+                    <div class="text-center">
+                        <div class="bg-purple-100 rounded-full p-3 w-16 h-16 mx-auto mb-3 flex items-center justify-center">
+                            <span class="text-3xl">🎫</span>
                         </div>
+                        <p class="text-gray-500 text-sm font-medium mb-1">Bookings</p>
+                        <p class="text-3xl font-bold text-purple-600">{{ $totalBookings }}</p>
+                    </div>
+                </div>
+
+                <!-- Total Revenue -->
+                <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-6 border border-gray-100">
+                    <div class="text-center">
+                        <div class="bg-teal-100 rounded-full p-3 w-16 h-16 mx-auto mb-3 flex items-center justify-center">
+                            <span class="text-3xl">💰</span>
+                        </div>
+                        <p class="text-gray-500 text-sm font-medium mb-1">Revenue</p>
+                        <p class="text-2xl font-bold text-teal-600">৳{{ number_format($totalRevenue, 0) }}</p>
                     </div>
                 </div>
             </div>
+
+            <!-- Today's Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl shadow-lg p-6 text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-green-100 text-sm mb-1">📅 Today's Bookings</p>
+                            <p class="text-4xl font-bold">{{ $todayBookings }}</p>
+                        </div>
+                        <div class="text-6xl opacity-20">🎫</div>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-br from-teal-500 to-teal-600 rounded-2xl shadow-lg p-6 text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-teal-100 text-sm mb-1">💵 Today's Revenue</p>
+                            <p class="text-4xl font-bold">৳{{ number_format($todayRevenue, 0) }}</p>
+                        </div>
+                        <div class="text-6xl opacity-20">💰</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sales by Route -->
+            @if($salesByRoute->count() > 0)
+            <div class="bg-white rounded-2xl shadow-md p-6 mb-8 border border-gray-100">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                    <span class="bg-green-100 text-green-600 rounded-lg px-3 py-1 text-sm mr-3">📊 Top Routes by Revenue</span>
+                </h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr class="border-b border-gray-200">
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Route</th>
+                                <th class="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase">Total Bookings</th>
+                                <th class="px-6 py-3 text-right text-xs font-semibold text-gray-600 uppercase">Total Revenue</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            @foreach($salesByRoute as $sale)
+                            <tr class="hover:bg-gray-50 transition">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center">
+                                        <span class="text-2xl mr-3">🗺️</span>
+                                        <span class="text-sm font-semibold text-gray-900">{{ $sale->route_name }}</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-semibold">
+                                        {{ $sale->total_bookings }} tickets
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <span class="text-lg font-bold text-teal-600">৳{{ number_format($sale->total_revenue, 0) }}</span>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @endif
+
+            <!-- Recent Bookings -->
+            @if($recentBookings->count() > 0)
+            <div class="bg-white rounded-2xl shadow-md p-6 mb-8 border border-gray-100">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                    <span class="bg-green-100 text-green-600 rounded-lg px-3 py-1 text-sm mr-3">🎫 Recent Bookings</span>
+                </h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr class="border-b border-gray-200">
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Booking Ref</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Passenger</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Company</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Route</th>
+                                <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase">Amount</th>
+                                <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            @foreach($recentBookings as $booking)
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-3 text-sm font-medium text-gray-800">{{ $booking->booking_reference }}</td>
+                                <td class="px-4 py-3 text-sm text-gray-600">{{ $booking->user->name }}</td>
+                                <td class="px-4 py-3 text-sm text-gray-600">{{ $booking->busSchedule->bus->company->name }}</td>
+                                <td class="px-4 py-3 text-sm text-gray-600">
+                                    {{ $booking->busSchedule->bus->route->districts->first()->name }} → 
+                                    {{ $booking->busSchedule->bus->route->districts->last()->name }}
+                                </td>
+                                <td class="px-4 py-3 text-sm font-semibold text-gray-800 text-right">৳{{ number_format($booking->total_amount, 0) }}</td>
+                                <td class="px-4 py-3 text-center">
+                                    @if($booking->status === 'confirmed')
+                                        <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold">Confirmed</span>
+                                    @elseif($booking->status === 'pending')
+                                        <span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-semibold">Pending</span>
+                                    @elseif($booking->status === 'cancelled')
+                                        <span class="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs font-semibold">Cancelled</span>
+                                    @else
+                                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-semibold">Expired</span>
+                                    @endif
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @endif
 
             <!-- Quick Actions -->
             <div class="bg-white rounded-2xl shadow-md p-6 mb-8 border border-gray-100">
