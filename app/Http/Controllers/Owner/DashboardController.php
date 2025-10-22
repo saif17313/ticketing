@@ -67,14 +67,13 @@ class DashboardController extends Controller
         // Get route details
         foreach ($salesByRoute as $sale) {
             $route = DB::table('routes')
-                ->join('route_district', 'routes.id', '=', 'route_district.route_id')
-                ->join('districts', 'route_district.district_id', '=', 'districts.id')
+                ->join('districts as source', 'routes.source_district_id', '=', 'source.id')
+                ->join('districts as destination', 'routes.destination_district_id', '=', 'destination.id')
                 ->where('routes.id', $sale->route_id)
-                ->orderBy('route_district.order')
-                ->select('districts.name')
-                ->get();
+                ->select('source.name as source_name', 'destination.name as destination_name')
+                ->first();
             
-            $sale->route_name = $route->first()->name . ' → ' . $route->last()->name;
+            $sale->route_name = $route->source_name . ' → ' . $route->destination_name;
         }
 
         // Recent bookings
