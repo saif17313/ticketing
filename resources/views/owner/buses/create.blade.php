@@ -82,11 +82,11 @@
                         <label for="seat_layout" class="block text-sm font-semibold text-gray-700 mb-2">🪑 Seat Layout <span class="text-red-500">*</span></label>
                         <select name="seat_layout" id="seat_layout" class="w-full px-4 py-3 border @error('seat_layout') border-red-500 @else border-gray-300 @enderror rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition" required>
                             <option value="">Select Layout</option>
-                            <option value="2x2" {{ old('seat_layout') == '2x2' ? 'selected' : '' }}>2x2 (4 seats per row)</option>
-                            <option value="2x3" {{ old('seat_layout') == '2x3' ? 'selected' : '' }}>2x3 (5 seats per row)</option>
-                            <option value="2x1" {{ old('seat_layout') == '2x1' ? 'selected' : '' }}>2x1 (3 seats per row)</option>
+                            <option value="2x2" {{ old('seat_layout') == '2x2' ? 'selected' : '' }}>2x2 (4 seats per row - Non-AC)</option>
+                            <option value="2x1" {{ old('seat_layout') == '2x1' ? 'selected' : '' }}>2x1 (3 seats per row - AC)</option>
                         </select>
                         @error('seat_layout')<p class="mt-2 text-sm text-red-600 flex items-center"><span class="mr-1">⚠️</span> {{ $message }}</p>@enderror
+                        <p class="mt-2 text-xs text-gray-500">2x2 for Non-AC buses, 2x1 for AC buses</p>
                     </div>
                     <div class="mb-8">
                         <label for="amenities" class="block text-sm font-semibold text-gray-700 mb-2">✨ Amenities</label>

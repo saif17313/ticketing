@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('bus_model', 100);
             $table->enum('bus_type', ['AC', 'Non-AC']);
             $table->integer('total_seats');
-            $table->enum('seat_layout', ['2x2', '2x3', '2x1'])->default('2x2');
+            $table->enum('seat_layout', ['2x2', '2x1'])->default('2x2');
             $table->text('amenities')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
