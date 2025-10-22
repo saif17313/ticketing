@@ -74,7 +74,7 @@
                                 <p class="text-orange-700 text-sm">Payment deadline: {{ $booking->payment_deadline->format('h:i A, d M Y') }}</p>
                             </div>
                             <a href="{{ route('passenger.booking.payment', $booking) }}" 
-                               class="inline-block mt-4 px-8 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl font-bold hover:from-orange-600 hover:to-orange-700 transition shadow-lg">
+                               class="inline-block mt-4 px-8 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-black rounded-xl font-bold hover:from-orange-600 hover:to-orange-700 transition shadow-lg">
                                 💳 Pay Now
                             </a>
                         @endif

@@ -158,7 +158,7 @@
                                             <!-- Pay Now Button for Pending Bookings -->
                                             @if($booking->needsPayment())
                                                 <a href="{{ route('passenger.booking.payment', $booking) }}" 
-                                                   class="px-6 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg hover:from-orange-600 hover:to-orange-700 transition font-semibold shadow-md">
+                                                   class="px-6 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-black rounded-lg hover:from-orange-600 hover:to-orange-700 transition font-semibold shadow-md">
                                                     💳 Pay Now
                                                 </a>
                                             @endif
