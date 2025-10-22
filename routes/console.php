@@ -13,3 +13,6 @@ Schedule::command('bookings:expire')->hourly();
 
 // Release expired bookings (payment deadline passed) - run every minute
 Schedule::command('bookings:release-expired')->everyMinute();
+
+// Unlock seats with expired locks - run every minute
+Schedule::command('seats:unlock-expired')->everyMinute();

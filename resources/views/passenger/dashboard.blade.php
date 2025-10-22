@@ -30,9 +30,9 @@
                                    class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition text-sm font-medium">
                                     📋 My Bookings
                                 </a>
-                                <a href="{{ route('passenger.dashboard') }}" 
+                                <a href="{{ route('home') }}" 
                                    class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition text-sm font-medium">
-                                    👤 My Profile
+                                    🏠 Home
                                 </a>
                             @endif
                             <form method="POST" action="{{ route('logout') }}" class="inline">
